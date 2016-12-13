@@ -1,0 +1,4 @@
+base_auto_part:
+    resource: "@BaseAutoPartBundle/Controller/"
+    type:     annotation
+    prefix:   /

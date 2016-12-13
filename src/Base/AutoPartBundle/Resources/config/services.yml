@@ -1,0 +1,4 @@
+services:
+#    base_auto_part.example:
+#        class: Base\AutoPartBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
