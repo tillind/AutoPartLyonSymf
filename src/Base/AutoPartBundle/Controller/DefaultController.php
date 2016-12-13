@@ -14,9 +14,6 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $number = mt_rand(0, 100);
-
-
-
         return $this->render('BaseAutoPartBundle:Default:index.html.twig');
 
     }
