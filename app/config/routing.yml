@@ -1,3 +1,13 @@
+employe_auto_part:
+    resource: "@EmployeAutoPartBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+client_auto_part:
+    resource: "@ClientAutoPartBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 base_auto_part:
     resource: "@BaseAutoPartBundle/Controller/"
     type:     annotation
