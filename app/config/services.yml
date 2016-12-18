@@ -4,6 +4,14 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+   connection_base:
+        class: Base\AutoPartBundle\Business\Connection
+   connection_client:
+        class: Client\AutoPartBundle\Business\Connection
+  connection_employe:
+        class: Employe\AutoPartBundle\Business\Connection
+
+  voiture_bdd:
+  class: EmployeAutoPartBundle\Business\VoitureBdd
+    calls:
+        - [connection, ['@connection_base']]

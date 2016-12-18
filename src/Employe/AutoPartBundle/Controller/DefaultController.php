@@ -5,6 +5,10 @@ namespace Employe\AutoPartBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * @Route("/Employe")
+ */
+
 class DefaultController extends Controller
 {
     /**

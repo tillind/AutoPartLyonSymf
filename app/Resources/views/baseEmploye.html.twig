@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="UTF-8">
         <title>
             {% block title %}
                 AutoPartage
@@ -9,20 +9,20 @@
         </title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
-        {% stylesheets 'bundles/cssBase/*' filter='cssrewrite' %}
+        {% stylesheets 'bundles/cssEmploye/*' filter='cssrewrite' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
     </head>
     <body>
-        {% block body %}
-        {% endblock %}
+    {% block body %}
+    {% endblock %}
     </body>
 
 
 
     {% block javascripts %}
-        {% javascripts 'bundles/jsBase/*' %}
+        {% javascripts 'bundles/jsEmploye/*' %}
         <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endblock %}

@@ -2,10 +2,15 @@
 
 namespace Base\AutoPartBundle\Controller;
 
+use Base\AutoPartBundle\Business\Voiture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
+
+/**
+ * @Route("/")
+ */
 class DefaultController extends Controller
 {
     /**
@@ -13,20 +18,18 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $number = mt_rand(0, 100);
-        return $this->render('BaseAutoPartBundle:Default:index.html.twig');
+        $maVoiture[] = new Voiture(1,"Scenic");
+        $maVoiture[] = new Voiture(2,"BMW");
+        $maVoiture[] = new Voiture(3,"Tesla");
+        $maVoiture[] = new Voiture(4,"Mercedes");
+        $maVoiture[] = new Voiture(5,"Totoya");
 
-    }
-    /**
-     * @Route("/Sana")
-     */
-    public function tutuAction()
-    {
-        $number = mt_rand(0, 100);
 
-        return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
+
+        return $this->render('BaseAutoPartBundle:Default:index.html.twig',
+            array(
+                "mesVoitures"=>$maVoiture
+            )
         );
     }
-
 }
