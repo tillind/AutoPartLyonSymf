@@ -6,26 +6,18 @@
  * Time: 11:49
  */
 
-namespace Base\AutoPartBundle\Business;
+namespace Client\AutoPartBundle\Business;
 
 
 class Connection
 {
     public $pdo=null;
     private $chaine="pgsql:host=127.0.0.1;port=5432;dbname=AutoPartLyon";
-    private $user="appsGen";
-    private $pwd="appsGen";
+    private $user="appsMembre";
+    private $pwd="appsMembre";
 
     public function __construct()
     {
       $this->pdo = new \PDO($this->chaine,$this->user,$this->pwd);
-    }
-
-    /**
-     * @return null|\PDO
-     */
-    public function getPdo()
-    {
-        return $this->pdo;
     }
 }

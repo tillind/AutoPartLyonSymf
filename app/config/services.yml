@@ -4,14 +4,12 @@ parameters:
 #    parameter_name: value
 
 services:
-   connection_base:
+   app.connection_base:
         class: Base\AutoPartBundle\Business\Connection
-   connection_client:
+   app.connection_client:
         class: Client\AutoPartBundle\Business\Connection
-  connection_employe:
+   app.connection_employe:
         class: Employe\AutoPartBundle\Business\Connection
-
-  voiture_bdd:
-  class: EmployeAutoPartBundle\Business\VoitureBdd
-    calls:
-        - [connection, ['@connection_base']]
+   app.requete_base:
+        class: Base\AutoPartBundle\Business\RequeteBdd
+        arguments: ['@app.connection_base']

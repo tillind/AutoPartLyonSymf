@@ -9,50 +9,80 @@
 namespace Base\AutoPartBundle\Business;
 
 class Voiture {
-    private $id;
-    private $nom;
+    private $idVoiture;
+    private $etatVoiture;
+    private $nomVoiture;
+    private $idStation;
 
-    public function __construct($id,$nom)
+    public function __construct($id,$nom,$etat,$station)
     {
-        $this->id = $id;
-        $this->nom = $nom;
+        $this->idVoiture = $id;
+        $this->nomVoiture = $nom;
+        $this->etatVoiture = $etat;
+        $this->idStation=$station;
     }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getEtatVoiture()
     {
-        return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        return $this->etatVoiture;
     }
 
     /**
      * @return mixed
      */
-    public function getNom()
+    public function getIdStation()
     {
-        return $this->nom;
+        return $this->idStation;
     }
 
     /**
-     * @param mixed $nom
+     * @return mixed
      */
-    public function setNom($nom)
+    public function getIdVoiture()
     {
-        $this->nom = $nom;
+        return $this->idVoiture;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getNomVoiture()
+    {
+        return $this->nomVoiture;
+    }
 
+    /**
+     * @param mixed $etatVoiture
+     */
+    public function setEtatVoiture($etatVoiture)
+    {
+        $this->etatVoiture = $etatVoiture;
+    }
 
-    public function insertBdd(){
+    /**
+     * @param mixed $idStation
+     */
+    public function setIdStation($idStation)
+    {
+        $this->idStation = $idStation;
+    }
 
+    /**
+     * @param mixed $idVoiture
+     */
+    public function setIdVoiture($idVoiture)
+    {
+        $this->idVoiture = $idVoiture;
+    }
+
+    /**
+     * @param mixed $nomVoiture
+     */
+    public function setNomVoiture($nomVoiture)
+    {
+        $this->nomVoiture = $nomVoiture;
     }
 }

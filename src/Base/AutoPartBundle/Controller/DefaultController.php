@@ -18,17 +18,13 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $maVoiture[] = new Voiture(1,"Scenic");
-        $maVoiture[] = new Voiture(2,"BMW");
-        $maVoiture[] = new Voiture(3,"Tesla");
-        $maVoiture[] = new Voiture(4,"Mercedes");
-        $maVoiture[] = new Voiture(5,"Totoya");
 
+        $this->get("app.requete_base")->getLesVoitures();
 
 
         return $this->render('BaseAutoPartBundle:Default:index.html.twig',
             array(
-                "mesVoitures"=>$maVoiture
+                "mesVoitures"=>NULL
             )
         );
     }
