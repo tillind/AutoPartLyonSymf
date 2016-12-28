@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b51bddc5-fe2e-403d-b28e-74cdac709c94" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Client/AutoPartBundle/Business/Connection.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Employe/AutoPartBundle/Business/Connection.php" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/VoitureBdd.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/services.yml" afterPath="$PROJECT_DIR$/app/config/services.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/base.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Connection.php" afterPath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Connection.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Voiture.php" afterPath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Voiture.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php" afterPath="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -30,24 +27,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-          <file leaf-file-name="DefaultController.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
-                  <caret line="21" column="57" lean-forward="false" selection-start-line="21" selection-start-column="57" selection-end-line="21" selection-end-column="57" />
-                  <folding>
-                    <element signature="e#50#91#0#PHP" expanded="true" />
-                    <element signature="e#492#536#0#PHP" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Connection.php" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Connection.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Connection.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="408">
-                  <caret line="29" column="5" lean-forward="false" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+                <state relative-caret-position="527">
+                  <caret line="36" column="5" lean-forward="false" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
                   <folding />
                 </state>
               </provider>
@@ -63,12 +47,68 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="connection.html.twig" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/connection.html.twig">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="51">
+                  <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="118" selection-end-column="6" />
+                  <folding>
+                    <element signature="e#12#26#0#Twig" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#3;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
+                    <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#span#0;n#div#0;n#div#6;n#form#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#7;n#form#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="base.html.twig" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1113">
+                  <caret line="72" column="31" lean-forward="false" selection-start-line="72" selection-start-column="31" selection-end-line="72" selection-end-column="31" />
+                  <folding>
+                    <element signature="e#1445#1476#0#Twig" expanded="true" />
+                    <element signature="e#1591#1624#0#Twig" expanded="true" />
+                    <element signature="e#1740#1769#0#Twig" expanded="true" />
+                    <element signature="e#2340#2346#0#HTML" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="services.yml" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app/config/services.yml">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="238">
                   <caret line="14" column="41" lean-forward="false" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
                   <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="inscription.html.twig" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/inscription.html.twig">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="589">
+                  <caret line="62" column="30" lean-forward="false" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
+                  <folding>
+                    <element signature="e#12#26#0#Twig" expanded="true" />
+                    <element signature="e#239#263#0#HTML" expanded="true" />
+                    <element signature="e#502#568#0#HTML" expanded="true" />
+                    <element signature="e#862#882#0#HTML" expanded="true" />
+                    <element signature="e#3255#3279#0#HTML" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -87,13 +127,45 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="RequeteBdd.php" pinned="false" current-in-tab="true">
+          <file leaf-file-name="DefaultController.php" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="790">
+                  <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#50#91#0#PHP" expanded="true" />
+                    <element signature="e#664#708#0#PHP" expanded="true" />
+                    <element signature="e#1149#1193#0#PHP" expanded="true" />
+                    <element signature="e#1626#1670#0#PHP" expanded="true" />
+                    <element signature="e#2561#2610#0#PHP" expanded="true" />
+                    <element signature="e#2788#2838#1#PHP" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="51">
+                  <caret line="3" column="16" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="16" />
+                  <folding>
+                    <element signature="e#12#26#0#Twig" expanded="true" />
+                    <element signature="e#270#308#0#Twig" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="RequeteBdd.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="459">
-                  <caret line="32" column="11" lean-forward="false" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
+                <state relative-caret-position="323">
+                  <caret line="24" column="38" lean-forward="false" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
                   <folding>
-                    <marker date="1482931510219" expanded="true" signature="479:541" ph="SELECT idvoi... voiture" />
+                    <marker date="1482943258527" expanded="true" signature="575:637" ph="SELECT idvoi... voiture" />
+                    <marker date="1482943258527" expanded="true" signature="1099:1189" ph="SELECT idvoi... voiture" />
+                    <marker date="1482943258527" expanded="true" signature="1706:1743" ph="SELECT code,... typevoiture" />
                   </folding>
                 </state>
               </provider>
@@ -124,20 +196,23 @@
         <option value="$PROJECT_DIR$/app/AppKernel.php" />
         <option value="$PROJECT_DIR$/app/config/config.yml" />
         <option value="$PROJECT_DIR$/app/Resources/views/baseEmploye.html" />
-        <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
         <option value="$PROJECT_DIR$/app/Resources/views/baseEmploye.html.twig" />
         <option value="$PROJECT_DIR$/src/Employe/AutoPartBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/business/Voiture.php" />
         <option value="$PROJECT_DIR$/src/Employe/AutoPartBundle/Controller/DefaultController.php" />
-        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/VoitureBdd.php" />
         <option value="$PROJECT_DIR$/src/Client/AutoPartBundle/Business/Connection.php" />
         <option value="$PROJECT_DIR$/src/Employe/AutoPartBundle/Business/Connection.php" />
         <option value="$PROJECT_DIR$/app/config/services.yml" />
         <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Voiture.php" />
-        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Connection.php" />
+        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php" />
+        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/inscription.html" />
+        <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
+        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php" />
+        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/connection.html.twig" />
+        <option value="$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/inscription.html.twig" />
       </list>
     </option>
   </component>
@@ -188,10 +263,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-16" />
-    <option name="y" value="-16" />
-    <option name="width" value="2564" />
-    <option name="height" value="1084" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="2576" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -457,6 +532,66 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Default" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoPartLyon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoPartLyon" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoPartBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoPartLyon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoPartLyon" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoPartBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="DependencyInjection" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
@@ -660,18 +795,18 @@
       <workItem from="1481645107531" duration="1814000" />
       <workItem from="1481707708827" duration="5238000" />
       <workItem from="1482917996680" duration="18000" />
-      <workItem from="1482918077403" duration="6414000" />
+      <workItem from="1482918077403" duration="16423000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19060000" />
+    <option name="totallyTimeSpent" value="29069000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-16" y="-16" width="2564" height="1084" extended-state="1" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11145997" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1109375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -703,30 +838,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/app.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -765,7 +876,11 @@
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#50#91#0#PHP" expanded="true" />
-            <element signature="e#492#536#0#PHP" expanded="true" />
+            <element signature="e#664#708#0#PHP" expanded="true" />
+            <element signature="e#1149#1193#0#PHP" expanded="true" />
+            <element signature="e#1626#1670#0#PHP" expanded="true" />
+            <element signature="e#2561#2610#0#PHP" expanded="true" />
+            <element signature="e#2788#2838#1#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -818,7 +933,11 @@
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#50#91#0#PHP" expanded="true" />
-            <element signature="e#492#536#0#PHP" expanded="true" />
+            <element signature="e#664#708#0#PHP" expanded="true" />
+            <element signature="e#1149#1193#0#PHP" expanded="true" />
+            <element signature="e#1626#1670#0#PHP" expanded="true" />
+            <element signature="e#2561#2610#0#PHP" expanded="true" />
+            <element signature="e#2788#2838#1#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -938,14 +1057,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Resources/views/default/index.html.twig" />
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="40" lean-forward="false" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/config/routing.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -972,14 +1083,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1056,6 +1159,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/services.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="41" lean-forward="false" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/config/config.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
@@ -1064,10 +1175,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/services.yml">
+    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="41" lean-forward="false" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+        <state relative-caret-position="323">
+          <caret line="24" column="38" lean-forward="false" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
+          <folding>
+            <marker date="1482943258527" expanded="true" signature="575:637" ph="SELECT idvoi... voiture" />
+            <marker date="1482943258527" expanded="true" signature="1099:1189" ph="SELECT idvoi... voiture" />
+            <marker date="1482943258527" expanded="true" signature="1706:1743" ph="SELECT code,... typevoiture" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/inscription.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -1080,31 +1203,86 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php">
+    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="57" lean-forward="false" selection-start-line="21" selection-start-column="57" selection-end-line="21" selection-end-column="57" />
+        <state relative-caret-position="51">
+          <caret line="3" column="16" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="16" />
           <folding>
-            <element signature="e#50#91#0#PHP" expanded="true" />
-            <element signature="e#492#536#0#PHP" expanded="true" />
+            <element signature="e#12#26#0#Twig" expanded="true" />
+            <element signature="e#270#308#0#Twig" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Business/Connection.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="29" column="5" lean-forward="false" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+        <state relative-caret-position="527">
+          <caret line="36" column="5" lean-forward="false" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Business/RequeteBdd.php">
+    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="32" column="11" lean-forward="false" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
+        <state relative-caret-position="790">
+          <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding>
-            <marker date="1482931510219" expanded="true" signature="479:541" ph="SELECT idvoi... voiture" />
+            <element signature="e#50#91#0#PHP" expanded="true" />
+            <element signature="e#664#708#0#PHP" expanded="true" />
+            <element signature="e#1149#1193#0#PHP" expanded="true" />
+            <element signature="e#1626#1670#0#PHP" expanded="true" />
+            <element signature="e#2561#2610#0#PHP" expanded="true" />
+            <element signature="e#2788#2838#1#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/connection.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="118" selection-end-column="6" />
+          <folding>
+            <element signature="e#12#26#0#Twig" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#3;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#6;n#form#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#7;n#form#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1113">
+          <caret line="72" column="31" lean-forward="false" selection-start-line="72" selection-start-column="31" selection-end-line="72" selection-end-column="31" />
+          <folding>
+            <element signature="e#1445#1476#0#Twig" expanded="true" />
+            <element signature="e#1591#1624#0#Twig" expanded="true" />
+            <element signature="e#1740#1769#0#Twig" expanded="true" />
+            <element signature="e#2340#2346#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Base/AutoPartBundle/Resources/views/Default/inscription.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="589">
+          <caret line="62" column="30" lean-forward="false" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
+          <folding>
+            <element signature="e#12#26#0#Twig" expanded="true" />
+            <element signature="e#239#263#0#HTML" expanded="true" />
+            <element signature="e#502#568#0#HTML" expanded="true" />
+            <element signature="e#862#882#0#HTML" expanded="true" />
+            <element signature="e#3255#3279#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
