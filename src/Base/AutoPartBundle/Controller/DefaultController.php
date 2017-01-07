@@ -19,11 +19,18 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
 
         $lesVoitures = $this->get("app.requete_base")->getLesVoitures();
         $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
 
-        //var_dump($lesVoitures);die;
         return $this->render('BaseAutoPartBundle:Default:index.html.twig',
             array(
                 "mesVoitures"=>$lesVoitures,
@@ -37,11 +44,20 @@ class DefaultController extends Controller
      */
     public function catalogueAction()
     {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
 
         $lesVoitures = $this->get("app.requete_base")->getLesVoitures();
+
         $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
 
-        //var_dump($lesVoitures);die;
         return $this->render('BaseAutoPartBundle:Default:index.html.twig',
             array(
                 "mesVoitures"=>$lesVoitures,
@@ -55,7 +71,15 @@ class DefaultController extends Controller
      */
     public function catalogueByCategAction($id=null)
     {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
 
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
         $lesVoitures = $this->get("app.requete_base")->getLesVoituresByCateg($id);
         $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
 
@@ -71,6 +95,16 @@ class DefaultController extends Controller
      * @Route("/connect")
      */
     public function connectAction(Request $request){
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
+
         $formBuilder = $this->get('form.factory')->createBuilder();
         $formBuilder
             ->add('Login','Symfony\Component\Form\Extension\Core\Type\TextType')
@@ -78,11 +112,25 @@ class DefaultController extends Controller
             ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
 
         $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
 
+            $res =  $this->get("app.requete_base")->userConnexion($data['Login'],$data['Password']);
 
-        if ($form->isValid()) {
-              // On redirige vers la page de visualisation de l'annonce nouvellement créée
-            return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
+            if(is_null($res)){
+                $this->get('session')->getFlashBag()->set('erreur', 'Combinaison utilisateur/mot de passe inconnue');
+
+                $session = $request->getSession();
+                $session->start();
+                $session->set('user',$res);
+            }else{
+                $session = $request->getSession();
+                $session->start();
+                $session->set('user',$res);
+                $session->set('type','utilisateur');
+                return $this->redirectToRoute("client_autopart_default_index");
+            }
         }
 
         return $this->render('BaseAutoPartBundle:Default:connection.html.twig',array(
@@ -93,7 +141,63 @@ class DefaultController extends Controller
     /**
      * @Route("/insc")
      */
-    public function inscriptionAction(){
-        return $this->render('BaseAutoPartBundle:Default:inscription.html.twig');
+    public function inscriptionAction(Request $request){
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
+
+        $formBuilder= $this->get("form.factory")->createBuilder();
+        $formBuilder->add('login','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('pass','Symfony\Component\Form\Extension\Core\Type\PasswordType')
+            ->add('repPass','Symfony\Component\Form\Extension\Core\Type\PasswordType')
+            ->add('nom','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('prenom','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('mail','Symfony\Component\Form\Extension\Core\Type\EmailType')
+            ->add('tel','Symfony\Component\Form\Extension\Core\Type\NumberType')
+            ->add('adresse','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('birth','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('permis','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('save','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+
+        $form= $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        $param ="display:none";
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+            if($data['pass'] != $data['repPass']){
+                $this->get('session')->getFlashBag()->set('erreur', 'Les mots de passes ne sont pas identique');
+            }else{
+                $result = $this->get("app.requete_base")->userInscription($data);
+                if($result == 2){
+                    $this->get('session')->getFlashBag()->set('erreur', 'L\'email existe deja');
+                } else if($result ==1) {
+                    $this->get('session')->getFlashBag()->set('success', 'L\'inscription à étais effectué avec succée vous pouvez désormer vous connecter');
+                    return $this->redirectToRoute("base_autopart_default_index");
+                }else{
+                    $this->get('session')->getFlashBag()->set('erreur', 'Quelque chose de mal s\'est passé');
+
+                }
+            }
+            $param="";
+        }
+
+        return $this->render('BaseAutoPartBundle:Default:inscription.html.twig',array(
+            'form' => $form->createView(),
+            'param'=>$param
+        ));
+    }
+    /**
+     * @Route("/disconnect")
+     */
+    public function disconnectAction(Request $request){
+        $this->get('session')->invalidate();
+        return $this->redirectToRoute("base_autopart_default_index");
     }
 }

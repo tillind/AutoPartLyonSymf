@@ -26,8 +26,6 @@ class Connection
             // En cas d'erreur, on affiche un message et on arrête tout
             die('Erreur : '.$e->getMessage());
         }
-
-
     }
 
     /**

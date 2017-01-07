@@ -8,14 +8,7 @@
  <!-- Page Content -->
  <div class="row">
 
- <div class="col-md-3">
-  <p class="lead">Catégorie de véhicule<p>
-  <div class="list-group">
-    {% for uneCateg in lesCategs %}
-      <a href="{{ path("base_autopart_default_cataloguebycateg") }}/{{ uneCateg.cat }}" class="list-group-item">{{ uneCateg.lib }}</a>
-    {% endfor %}
-  </div>
- </div>
+
 
    <div class="col-md-9">
 
@@ -30,13 +23,13 @@
        </ol>
        <div class="carousel-inner">
         <div class="item active">
-         <img class="slide-image" src="https://www.permigo.com/wp-content/uploads/2015/07/Lyon.jpg" alt="">
+                <img class="slide-image"  src="{{ asset("bundles/img/Lyon.jpg") }}" alt="Lyon"  />
         </div>
         <div class="item">
-         <img class="slide-image" src="https://www.permigo.com/wp-content/uploads/2015/07/Lyon.jpg" alt="">
+         <img class="slide-image"  src="{{ asset("bundles/img/etat-veut-reduire-son-parc-auto-ici-2017-faire-150-F.jpg") }}" alt="Tesla"  />
         </div>
         <div class="item">
-         <img class="slide-image" src="https://www.permigo.com/wp-content/uploads/2015/07/Lyon.jpg" alt="">
+         <img class="slide-image"  src="{{ asset("bundles/img/clients-satisfaits.jpg") }}" alt="Lamborginy"  />
         </div>
        </div>
        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -50,6 +43,14 @@
 
     </div>
 
+    <div class="col-md-3">
+     <p class="lead">Catégorie de véhicule<p>
+     <div class="list-group">
+         {% for uneCateg in lesCategs %}
+          <a href="{{ path("base_autopart_default_cataloguebycateg") }}/{{ uneCateg.cat }}" class="list-group-item">{{ uneCateg.lib }}</a>
+         {% endfor %}
+     </div>
+    </div>
     <div class="row">
 
         {% for maVoiture in mesVoitures %}
@@ -83,4 +84,12 @@
  </div>
 
 
+{% endblock %}
+
+{% block js %}
+ <script>
+     $( function() {
+         $( "#datepicker" ).datepicker();
+     } );
+ </script>
 {% endblock %}
