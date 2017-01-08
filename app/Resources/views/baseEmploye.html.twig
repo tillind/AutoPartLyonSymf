@@ -2,6 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+
+        {% block javascripts %}
+            <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
+        {% endblock %}
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
         <title>
             {% block title %}
                 AutoPartage
@@ -9,7 +18,14 @@
         </title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
-        {% stylesheets 'bundles/cssEmploye/*' filter='cssrewrite' %}
+        {% stylesheets 'bundles/cssEmploye/vendor/bootstrap/css/bootstrap.min.css'
+        'bundles/cssEmploye/bootstrap-datetimepicker.css'
+
+        'bundles/cssEmploye/vendor/metisMenu/metisMenu.min.css'
+        'bundles/cssEmploye/vendor/font-awesome/css/font-awesome.min.css'
+        'bundles/cssEmploye/sb-admin-2.css'
+
+        filter='cssrewrite' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
@@ -19,11 +35,6 @@
     {% endblock %}
     </body>
 
-
-
-    {% block javascripts %}
-        {% javascripts 'bundles/jsEmploye/*' %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+    {% block js %}
     {% endblock %}
 </html>
