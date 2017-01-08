@@ -13,3 +13,6 @@ services:
    app.requete_base:
         class: Base\AutoPartBundle\Business\RequeteBdd
         arguments: ['@app.connection_base']
+   app.requete_employe:
+        class: Employe\AutoPartBundle\Business\RequeteBdd
+        arguments: ['@app.connection_employe']

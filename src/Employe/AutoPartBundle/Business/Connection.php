@@ -13,8 +13,8 @@ class Connection
 {
     public $pdo=null;
     private $chaine="pgsql:host=127.0.0.1;port=5432;dbname=AutoPartLyon";
-    private $user="appsEmployer";
-    private $pwd="appsEmployer";
+    private $user="appsEmploye";
+    private $pwd="appsEmploye";
 
     public function __construct()
     {
