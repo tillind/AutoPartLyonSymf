@@ -118,4 +118,80 @@ class RequeteBdd
         $row  = $stmt -> fetch();
         return $row;
     }
+
+    //Récupère voiture disponible dans l'intervalle debut-fin
+    public function getLesVoitureByDate($dateDebut, $dateFin){
+        $lesVoiture =array();
+
+        if($this->connexion instanceof \PDO){
+            if ($dateDebut!=null and $dateFin!=null){
+                $query="SELECT idvoiture, etatvoiture, nomvoiture, idstation FROM Voiture";
+                $stmt = $this->connexion->query($query)->fetchAll();
+                foreach($stmt as $uneVoiture){
+                    if ($this->checkVoiture($uneVoiture[0], $dateDebut, $dateFin)){
+                        $lesVoiture[]= new Voiture($uneVoiture[0],$uneVoiture[2],$uneVoiture[1],$uneVoiture[3]);
+                    }
+                }
+            }
+        }
+    }
+
+    /*Retour: booleen
+    Vrai si la voiture est dispo dans l'intervalle $date-$fin
+    */
+    private function checkVoiture($id, $date, $fin){
+        $available=true;
+        /*Recuperation de toutes les interventions de cette voiture*/
+        $query="SELECT dateIntervention, dateFinIntervention FROM InterventionVoiture WHERE idVoiture= :id";
+        $stmt = $this->connexion->prepare($query);
+        $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
+        $stmt->execute();
+        foreach($stmt as $uneInter){
+            /*Verification qu'aucune intervention ne chevauche les dates en paramètre*/ 
+            if ($this->checkDate($date, $fin, $uneInter[0], $uneInter[1])==false){
+                $available=false;
+            }
+        }
+
+        /*Indentique avec les réservations*/ 
+        $query2="SELECT dateDebutReservation, dateFinReservation FROM Reservation WHERE idVoiture= :id";
+        $stmt2 = $this->connexion->prepare($query2);
+        $stmt2->bindParam(":id",$id,\PDO::PARAM_STR);
+        $stmt2->execute();
+        foreach($stmt2 as $uneResa){
+            if ($this->checkDate($date, $fin, $uneResa[0], $uneResa[1])==false){
+                $available=false;
+            }
+        }
+        return $available;
+    }
+
+    /* Retour: booleen
+    Faux si les intervalles $debut1-$fin1 et $debut2-$fin2 se chevauchent
+    Vrai sinon
+    */
+    private function checkDate($debut1, $fin1, $debut2, $fin2){
+        if ($this->dateIn($debut1,$debut2,$fin2)
+            or $this->dateIn($fin1,$debut2,$fin2)
+            or $this->dateIn($debut2,$debut1,$fin1)
+            or $this->dateIn($fin2,$debut1,$fin1)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /* Retour: booleen
+    Vrai si $date est dans l'intervalle $debut-$fin
+    Faux sinon
+     */ 
+    private function dateIn($date, $debut, $fin){
+        if ($date>=$debut and $date<=$fin){
+            return (true);
+        }
+        else{
+            return (false);
+        }
+    }
 }
