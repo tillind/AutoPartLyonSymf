@@ -18,6 +18,21 @@ class Connection
 
     public function __construct()
     {
-      $this->pdo = new \PDO($this->chaine,$this->user,$this->pwd);
+        try{
+            $this->pdo = new \PDO($this->chaine,$this->user,$this->pwd,array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+        }
+        catch(Exception $e)
+        {
+            // En cas d'erreur, on affiche un message et on arrête tout
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @return null|\PDO
+     */
+    public function getPdo()
+    {
+        return $this->pdo;
     }
 }
