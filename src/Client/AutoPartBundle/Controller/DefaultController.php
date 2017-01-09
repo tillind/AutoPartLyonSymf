@@ -28,7 +28,7 @@ class DefaultController extends Controller
     /**
      * @Route("/profil")
      */
-    public function reservationAction()
+    public function profilAction()
     {
         //TO DO: créer & changer twig
         return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig');
