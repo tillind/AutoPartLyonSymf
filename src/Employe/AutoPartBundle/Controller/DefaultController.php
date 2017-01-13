@@ -17,56 +17,133 @@ class DefaultController extends Controller
     /**
      * @Route("/")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $lesStationChoice=null;
-        $lesTypesVoituresChoice=null;
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
+        return $this->render('EmployeAutoPartBundle:Default:index.html.twig',
+            array()
+        );
+    }
+
+    /**
+     * @Route("/ajout")
+     */
+    public function ajoutAction(Request $request)
+    {
+        $lesStationChoice = null;
+        $lesTypesVoituresChoice = null;
         $lesStations = $this->get("app.requete_employe")->getLesStations();
         $lesTypesVoitures = $this->get("app.requete_employe")->getLesTypesVoitures();
         $formBuilder = $this->get('form.factory')->createBuilder();
-        foreach ( $lesStations as $station ) {
-            $lesStationChoice[$station["nom"]]=$station["id"];
+        foreach ($lesStations as $station) {
+            $lesStationChoice[$station["nom"]] = $station["id"];
         }
-        foreach ( $lesTypesVoitures as $voiture ) {
-            $lesTypesVoituresChoice[$voiture["libelle"]]=$voiture["code"];
+        foreach ($lesTypesVoitures as $voiture) {
+            $lesTypesVoituresChoice[$voiture["libelle"]] = $voiture["code"];
         }
 
-            $formBuilder
-                ->add('etatvoiture', TextType::class)
-                ->add('datedebutassurance', TextType::class)
-                ->add('datefinassurance', TextType::class)
-                ->add('nbkilometres', TextType::class)
-                ->add('numcartegrise', TextType::class)
-                ->add("idstation", ChoiceType::class,
-                    array(
-                        "attr" => array("class" => "form-control select2"),
-                        'choices'  => $lesStationChoice,
-                    ))
-                ->add('codevoiture', ChoiceType::class,
-                    array(
-                        "attr" => array("class" => "form-control select2"),
-                        'choices'  =>   $lesTypesVoituresChoice,
-                    ))
+        $formBuilder
+            ->add('etatvoiture', TextType::class)
+            ->add('datedebutassurance', TextType::class)
+            ->add('datefinassurance', TextType::class)
+            ->add('nbkilometres', TextType::class)
+            ->add('numcartegrise', TextType::class)
+            ->add("idstation", ChoiceType::class,
+                array(
+                    "attr" => array("class" => "form-control select2"),
+                    'choices' => $lesStationChoice,
+                ))
+            ->add('codevoiture', ChoiceType::class,
+                array(
+                    "attr" => array("class" => "form-control select2"),
+                    'choices' => $lesTypesVoituresChoice,
+                ))
+            ->add('nomvehicule', TextType::class)
+            ->add('submit', SubmitType::class);
 
 
-                ->add('submit', SubmitType::class);
-
-
-            $form = $formBuilder->getForm();
+        $form = $formBuilder->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $data = $form->getData();
 
             $result = $this->get("app.requete_employe")->ajoutVehicule($data);
-           var_dump($data);die;
+            var_dump($data);
+            die;
             return $this->redirectToRoute('task_success');
         }
 
-        return $this->render('EmployeAutoPartBundle:Default:index.html.twig',array(
-            "mesStations"=>$lesStations,
-            "mesVoitures"=> $lesTypesVoitures,
+        return $this->render('EmployeAutoPartBundle:Default:ajout.html.twig', array(
+            "mesStations" => $lesStations,
+            "mesVoitures" => $lesTypesVoitures,
             'form' => $form->createView()
         ));
     }
+
+    /**
+     * @Route("/recherche")
+     */
+    public function rechercheAction(Request $request)
+    {
+        $lesCategories = null;
+        $lesCategories= $this->get("app.requete_employe")->getLesCategVoiture();
+
+        return $this->render('EmployeAutoPartBundle:Default:recherche.html.twig', array(
+            "mesCategories" => $lesCategories,
+        ));
+    }
+    /**
+     * @Route("/voiture/{id}")
+     */
+    public function voitureByIdAction($id=null)
+    {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
+        $lesVoitures = $this->get("app.requete_employe")->getLesVoituresById($id);
+
+
+        return $this->render('EmployeAutoPartBundle:Default:ficheVehicule.html.twig',
+            array(
+                "mesVoitures"=>$lesVoitures,
+            ));
+    }
+    /**
+     * @Route("/catalogue/{id}")
+     */
+    public function catalogueByCategAction($id=null)
+    {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            } elseif ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }
+        $lesVoitures = $this->get("app.requete_base")->getLesVoituresByCateg($id);
+        $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
+        return $this->render('EmployeAutoPartBundle:Default:catalogue.html.twig',
+            array(
+                "mesVoitures"=>$lesVoitures,
+                "lesCategs"=>$lesCateg
+            )
+        );
+    }
 }
+
+
+

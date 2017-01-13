@@ -18,7 +18,7 @@ class RequeteBdd
         $this->connexion = $connect->getPdo();
     }
     public function getLesStations(){
-        $lesStations =array();
+
 
         if($this->connexion instanceof \PDO){
             $stmt = $this->connexion->query("SELECT idstation,nom FROM station")->fetchAll();
@@ -37,18 +37,28 @@ class RequeteBdd
                 $lesTypesVoitures[]= array('code'=>$leType[0],'libelle'=>$leType[1]);
             }
         }
-        else{
-            //  echo"un probleme";die;
-        }
         return $lesTypesVoitures;
     }
 
 
+    public function getLesVoituresById($var){
+        $lesVoiture =null;
+        $lesStations=null;
+        $result=null;
+        if($this->connexion instanceof \PDO){
+            $stmt = $this->connexion->prepare("SELECT idvoiture, etatvoiture, datedebutassurance, datefinassurance, nbkilometre, numcartegrise,  voiture.idstation, codetypevoiture, nomvoiture,station.nom FROM voiture INNER JOIN station ON voiture.idstation=station.idstation WHERE idvoiture= :var");
+            $stmt->bindParam(":var",$var,\PDO::PARAM_STR);
+            $stmt->execute();
 
-
-
+            foreach($stmt as $lavoiture){
+                $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[1],$lavoiture[2],$lavoiture[3],$lavoiture[4],$lavoiture[5],$lavoiture[6],$lavoiture[7],$lavoiture[8]);
+                $lesStations[]=array('nom'=>$lavoiture[9]);
+            }
+        };
+        return $result=array($lesVoiture,$lesStations);
+    }
     public function ajoutVehicule($arrayVehicule){
-        $stmt = $this->connexion->prepare("INSERT INTO public.voiture(idvoiture, etatvoiture, datedebutassurance, datefinassurance,nbkilometre, numcartegrise, proprietaire, idstation, codetypevoiture) VALUES(
+        $stmt = $this->connexion->prepare("INSERT INTO public.voiture(idvoiture, etatvoiture, datedebutassurance, datefinassurance,nbkilometre, numcartegrise, proprietaire, idstation, codetypevoiture,nomVoiture) VALUES(
             DEFAULT,
             :etat,
             :datedeb,
@@ -57,7 +67,8 @@ class RequeteBdd
             :numcartegrise,
             TRUE,
             :idstation,
-            :codetypevoiture
+            :codetypevoiture,
+            :nomvoiture
         );");
 
         $stmt->bindParam(":etat",$arrayVehicule['etatvoiture'],\PDO::PARAM_STR);
@@ -67,8 +78,20 @@ class RequeteBdd
         $stmt->bindParam(":numcartegrise",$arrayVehicule['numcartegrise'],\PDO::PARAM_STR);
         $stmt->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_STR);
         $stmt->bindParam(":codetypevoiture",$arrayVehicule['codevoiture'],\PDO::PARAM_STR);
+        $stmt->bindParam(":nomvoiture",$arrayVehicule['nomvehicule'],\PDO::PARAM_STR);
         $stmt->execute();
         $row  = $stmt -> fetch();
+    }
+    public function getLesCategVoiture(){
+        $lesCategories =array();
+
+        if($this->connexion instanceof \PDO){
+            $stmt = $this->connexion->query("SELECT code, libelle FROM typevoiture")->fetchAll();
+            foreach($stmt as $uneCateg){
+                $lesCategories[]= array("cat" =>$uneCateg[0],"lib"=>$uneCateg[1]);
+            }
+        }
+        return $lesCategories;
     }
 
 }
