@@ -13,7 +13,7 @@
 
         <title>
             {% block title %}
-                AutoPartage
+                AutoPartage Section Employe
             {% endblock %}
         </title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -31,6 +31,22 @@
 
     </head>
     <body>
+
+
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+
+                <li>
+                    <a  href="{{ path("employe_autopart_default_ajout") }}"><i class="fa fa-dashboard fa-fw"></i> Ajouter un véhicule</a>
+                </li>
+                <li>
+                    <a  href="{{ path("employe_autopart_default_recherche") }}"><i class="fa fa-dashboard fa-fw"></i> Rechercher un véhicule</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
     {% block body %}
     {% endblock %}
     </body>
