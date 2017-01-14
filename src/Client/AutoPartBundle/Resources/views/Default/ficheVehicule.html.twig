@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="row">
+
+   <div class="col-md-3">
+       <a href="{{ path("client_autopart_default_profil") }}" class="list-group-item">Mon profil</a>
+
+       <a href="{{ path("client_autopart_default_reservation") }}" class="list-group-item">Mes réservations</a>
+
+       <a href="{{ path("client_autopart_default_index") }}" class="list-group-item">Recherher un véhicule</a>
+
+   </div>
+
+   <div class="col-md-9">
+
+
+        <div id="page-wrapper">
+            <div class="container">
+                
+                <div class="row">
+
+                    <div class="col-md-8">
+                        <h3>Description du véhicule</h3>
+                        <ul contenteditable="true">
+                       
+                            <li><h4>Nom du véhicule : {{  maVoiture.nomvoiture}}</h4> </li>
+                            <li><h4>Etat du véhicule : {{  maVoiture.etatVoiture}}</h4></li>
+                            <li><h4>Catégorie de véhicule: {{  maVoiture.type}}</h4></li>
+                        
+
+                        </ul>
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+
+
+    </div>
+        
+ </div>
+    {% endblock %}

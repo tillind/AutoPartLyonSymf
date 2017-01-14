@@ -13,13 +13,15 @@ class Voiture {
     private $etatVoiture;
     private $nomVoiture;
     private $idStation;
+    private $type;
 
-    public function __construct($id,$nom,$etat,$station)
+    public function __construct($id,$nom,$etat,$station,$type)
     {
         $this->idVoiture = $id;
         $this->nomVoiture = $nom;
         $this->etatVoiture = $etat;
         $this->idStation=$station;
+        $this->type=$type;
     }
 
     /**
@@ -55,6 +57,14 @@ class Voiture {
     }
 
     /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
      * @param mixed $etatVoiture
      */
     public function setEtatVoiture($etatVoiture)
@@ -84,5 +94,13 @@ class Voiture {
     public function setNomVoiture($nomVoiture)
     {
         $this->nomVoiture = $nomVoiture;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }

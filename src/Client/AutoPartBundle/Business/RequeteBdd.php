@@ -6,7 +6,9 @@
  * Time: 11:06
  */
 
+
 namespace Client\AutoPartBundle\Business;
+use \DateTime;
 
 
 class RequeteBdd
@@ -17,62 +19,14 @@ class RequeteBdd
     {
            $this->connexion = $connect->getPdo();
     }
-
-    public function userConnexion($login,$pwd){
-        $tmpPass =crypt($pwd,password_hash($pwd, PASSWORD_DEFAULT));
-
-        $stmt = $this->connexion->prepare("SELECT public.sp_verif_connect_membre(:log)");
-        $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
-        $stmt->execute();
-        $row  = $stmt -> fetch();
-
-        if(hash_equals($row['sp_verif_connect_membre'], crypt($pwd,$row['sp_verif_connect_membre']))){
-            return $this->getMembre($login);
-        }else{
-            return null;
-        }
-
-    }
-
-    public function userInscription($arrayUser){
-        $tmpPass =crypt($arrayUser['pass'],password_hash($arrayUser['pass'], PASSWORD_DEFAULT));
-        $stmt = $this->connexion->prepare("SELECT public.sp_inscription_membre(
-            :mail,
-            :nom,
-            :prenom,
-            :log,
-            :pass,
-            :adr,
-            :ddn,
-            :tp,
-            :tel
-        );");
-
-        $stmt->bindParam(":log",$arrayUser['login'],\PDO::PARAM_STR);
-        $stmt->bindParam(":nom",$arrayUser['nom'],\PDO::PARAM_STR);
-        $stmt->bindParam(":prenom",$arrayUser['prenom'],\PDO::PARAM_STR);
-        $stmt->bindParam(":mail",$arrayUser['mail'],\PDO::PARAM_STR);
-        $stmt->bindParam(":tel",$arrayUser['tel'],\PDO::PARAM_STR);
-        $stmt->bindParam(":adr",$arrayUser['adresse'],\PDO::PARAM_STR);
-        $stmt->bindParam(":ddn",$arrayUser['birth']);
-        $stmt->bindParam(":tp",$arrayUser['permis'],\PDO::PARAM_STR);
-        $stmt->bindParam(":pass",$tmpPass);
-
-
-
-        $stmt->execute();
-        $row  = $stmt -> fetch();
-        return $row['sp_inscription_membre'];
-    }
-
+    
     public function getLesVoitures(){
         $lesVoiture =array();
 
         if($this->connexion instanceof \PDO){
-            $stmt = $this->connexion->query("SELECT idvoiture,etatvoiture,nomvoiture,idstation FROM public.voiture")->fetchAll();
+            $stmt = $this->connexion->query("SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.codetypevoiture=typevoiture.code")->fetchAll();
             foreach($stmt as $lavoiture){
-                //
-                $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[2],$lavoiture[1],$lavoiture[3]);
+                $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[2],$lavoiture[1],$lavoiture[3],$lavoiture[4]);
             }
         }else{
           //  echo"un probleme";die;
@@ -84,12 +38,12 @@ class RequeteBdd
         $lesVoiture =array();
 
         if($this->connexion instanceof \PDO){
-            $stmt = $this->connexion->prepare("SELECT idvoiture,etatvoiture,nomvoiture,idstation FROM voiture WHERE codetypevoiture= :var");
+            $stmt = $this->connexion->prepare("SELECT idvoiture,etatvoiture,nomvoiture,idstation,libelle FROM voiture,typeVoiture WHERE codetypevoiture= :var and voiture.codetypevoiture=typevoiture.code");
             $stmt->bindParam(":var",$var,\PDO::PARAM_STR);
             $stmt->execute();
 
             foreach($stmt as $lavoiture){
-                $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[2],$lavoiture[1],$lavoiture[3]);
+                $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[2],$lavoiture[1],$lavoiture[3],$lavoiture[4]);
             }
         }else{
             //  echo"un probleme";die;
@@ -103,7 +57,7 @@ class RequeteBdd
         if($this->connexion instanceof \PDO){
             $stmt = $this->connexion->query("SELECT code, libelle FROM typevoiture")->fetchAll();
             foreach($stmt as $uneCateg){
-                $lesCategories[]= array("cat" =>$uneCateg[0],"lib"=>$uneCateg[1]);
+                $lesCategories[$uneCateg[1]]= $uneCateg[0];
             }
         }else{
             //  echo"un probleme";die;
@@ -111,29 +65,45 @@ class RequeteBdd
         return $lesCategories;
     }
 
-    private function getMembre($login){
-        $stmt = $this->connexion->prepare("SELECT login, nom, prenom, mail, telephone, adresse, datedenaissance, typepermis, dateinscription FROM public.membre WHERE login=:log");
-        $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
-        $stmt->execute();
-        $row  = $stmt -> fetch();
-        return $row;
-    }
 
     //Récupère voiture disponible dans l'intervalle debut-fin
-    public function getLesVoitureByDate($dateDebut, $dateFin){
-        $lesVoiture =array();
+    public function getLesVoitureByDateAndCateg($dateDebut, $dateFin, $categ){
+        $lesVoitures =array();
 
         if($this->connexion instanceof \PDO){
+
+            //si des dates ont été demandées
             if ($dateDebut!=null and $dateFin!=null){
-                $query="SELECT idvoiture, etatvoiture, nomvoiture, idstation FROM Voiture";
-                $stmt = $this->connexion->query($query)->fetchAll();
+                $query="SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.codetypevoiture=typevoiture.code";
+                $stmt;
+                if ($categ !=null){
+                    $query .=" and codetypevoiture= :categ";
+                    $stmt = $this->connexion->prepare($query);
+                    $stmt->bindParam(":categ",$categ,\PDO::PARAM_STR);
+                }
+                else{
+                    $stmt = $this->connexion->prepare($query);
+                }
+                $stmt->execute();
                 foreach($stmt as $uneVoiture){
                     if ($this->checkVoiture($uneVoiture[0], $dateDebut, $dateFin)){
-                        $lesVoiture[]= new Voiture($uneVoiture[0],$uneVoiture[2],$uneVoiture[1],$uneVoiture[3]);
+                        $lesVoitures[]= new Voiture($uneVoiture[0],$uneVoiture[2],$uneVoiture[1],$uneVoiture[3],$uneVoiture[4]);
                     }
                 }
             }
+        
+            else{
+                //si juste une catégorie demandée
+                if ($categ !=null){
+                    $lesVoitures=$this->getLesVoituresByCateg($categ);
+                }
+                //si aucun fitre de recherche
+                else{
+                    $lesVoitures=$this->getLesVoitures();
+                }
+            }
         }
+        return $lesVoitures;
     }
 
     /*Retour: booleen
@@ -147,9 +117,9 @@ class RequeteBdd
         $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
         $stmt->execute();
         foreach($stmt as $uneInter){
-            /*Verification qu'aucune intervention ne chevauche les dates en paramètre*/ 
+            /*Si une intervention chevauche les dates en paramètre, la voiture n'est pas dispo*/ 
             if ($this->checkDate($date, $fin, $uneInter[0], $uneInter[1])==false){
-                $available=false;
+                return (false);
             }
         }
 
@@ -160,7 +130,7 @@ class RequeteBdd
         $stmt2->execute();
         foreach($stmt2 as $uneResa){
             if ($this->checkDate($date, $fin, $uneResa[0], $uneResa[1])==false){
-                $available=false;
+                return (false);
             }
         }
         return $available;
@@ -186,12 +156,37 @@ class RequeteBdd
     Vrai si $date est dans l'intervalle $debut-$fin
     Faux sinon
      */ 
-    private function dateIn($date, $debut, $fin){
-        if ($date>=$debut and $date<=$fin){
-            return (true);
+    private function dateIn($date, $debut, $fin){        
+
+    $newDebut = str_replace('/', '-', $debut);
+    $date2 = DateTime::createFromFormat("Y-m-d",$newDebut);
+
+    $newFin = str_replace('/', '-', $fin);
+    $date3 = DateTime::createFromFormat("Y-m-d",$newFin);
+
+    $newDate = str_replace('/', '-', $date);
+    $date1 = DateTime::createFromFormat('m-d-Y H:i',$newDate);
+
+
+    if ($date1>=$date2 and $date1<=$date3){
+        return (true);
         }
-        else{
-            return (false);
+    else{
+        return (false);
         }
     }
+
+
+    public function getVoitureById($id){
+
+        $query="SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.idvoiture=:id";
+        $stmt = $this->connexion->prepare($query);
+        $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
+        $stmt->execute();
+        foreach($stmt as $uneVoiture){
+            return (new Voiture($uneVoiture[0],$uneVoiture[2],$uneVoiture[1],$uneVoiture[3],$uneVoiture[4]));
+        }
+    }
+
+    
 }
