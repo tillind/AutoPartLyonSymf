@@ -1,0 +1,60 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+{{  form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+<link rel="stylesheet" href="{{ asset('bundles/bootstrap-datetimepicker.min.css') }}">
+
+
+<div class="container">
+    <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Sélectionnez les critères</div>
+            </div>
+            <div class="panel-body" >
+                <form id="signupform" class="form-horizontal" role="form">
+
+                    <div class="form-group">
+                        <label for="categorie" class="col-md-5 control-label">Catégorie</label>
+                        <div class="col-md-7">
+                            {{ form_widget(form.categorie, {'attr': {'class': 'form-control','name':'categorie','placeholder':'Categorie'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateDebut" class="col-md-5 control-label">Date de début de la réservation</label>
+                        <div class="col-md-7">
+                            {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control datetimepicker','name':'dateDebut','placeholder':'Début de début'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateFin" class="col-md-5 control-label">Date de fin de la réservation</label>
+                        <div class="col-md-7">
+                            {{ form_widget(form.dateFin, {'attr': {'class': 'form-control datetimepicker','name':'dateFin','placeholder':'Date de fin'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- Button -->
+                        <div class="col-md-offset-5 col-md-7">
+                            {{ form_widget(form.submit, { 'label': 'Valider' ,'attr': {'class': 'form-btn btn-info'}  }) }}
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
+
+{% block js %}
+<script src="{{ asset('bundles/bootstrap-datetimepicker.min.js') }}"></script>
+<script>
+        $( function() {
+            $( ".datetimepicker" ).datetimepicker();
+        } );
+</script>
+
+{% endblock %}

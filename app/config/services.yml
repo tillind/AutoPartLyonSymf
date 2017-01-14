@@ -16,3 +16,6 @@ services:
    app.requete_employe:
         class: Employe\AutoPartBundle\Business\RequeteBdd
         arguments: ['@app.connection_employe']
+   app.requete_client:
+        class: Client\AutoPartBundle\Business\RequeteBdd
+        arguments: ['@app.connection_client']

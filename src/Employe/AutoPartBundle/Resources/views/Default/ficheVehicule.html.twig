@@ -1,0 +1,66 @@
+
+{% extends "baseEmploye.html.twig" %}
+
+
+
+    {% block body %}
+
+        <div id="page-wrapper">
+            <div class="container">
+
+                <!-- Portfolio Item Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Nom de la voiture :
+                            {% for maVoiture in mesVoitures[0] %}
+                            <small>{{  maVoiture.nomVoiture}}</small>
+                            {% endfor %}
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <!-- Portfolio Item Row -->
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <img class="img-responsive" src="{{ asset("bundles/img/clio.jpg") }}" alt="">
+                    </div>
+
+                    <div class="col-md-8">
+                        <h3>Description du véhicule</h3>
+                        <ul contenteditable="true">
+                        {% for maVoiture in mesVoitures[0] %}
+                            <li><h4>Id du véhicule : {{  maVoiture.idVoiture}}</h4> </li>
+                            <li><h4>Etat du véhicule : {{  maVoiture.etatVoiture}}</h4></li>
+                            <li><h4>Date de début d'assurance : {{  maVoiture.datedebutassurance}}</h4></li>
+                            <li><h4>Date de fin d'assurance : {{  maVoiture.datefinassurance}}</h4></li>
+                            <li><h4>Kilométrage : {{  maVoiture.nbkilometre}}</h4></li>
+                            <li><h4>Numéro de carte grise : {{  maVoiture.numcartegrise}}</h4></li>
+                            <li><h4>Numéro de la station {{  maVoiture.idstation}}</h4></li>
+                            {% for maVoituree in mesVoitures[1] %}
+                                <li><h4>Nom de la sation : {{  maVoituree.nom}}</h4></li>
+                            {% endfor %}
+                            <li><h4>Code Type: {{  maVoiture.codetypevoiture}}</h4></li>
+                        {% endfor %}
+
+                        </ul>
+                    </div>
+
+                </div>
+                <button class="btn btn-primary" onClick="history.go(-1);return true;"><span class="glyphicon glyphicon-arrow-left" ></span> Retour</button>
+
+            </div>
+        </div>
+        <!-- /.row -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+        </div>
+
+
+
+
+    {% endblock %}
+
