@@ -2,16 +2,15 @@
 
 namespace Base\AutoPartBundle\Controller;
 
-use Base\AutoPartBundle\Business\Voiture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 /**
  * @Route("/")
  */
+
 class DefaultController extends Controller
 {
     /**
@@ -46,7 +45,6 @@ class DefaultController extends Controller
     {
         if($this->get('session')->isStarted()){
             $type = $this->get('session')->get('type');
-
             if ($type == 'utilisateur') {
                 return $this->redirectToRoute('client_autopart_default_index');
             } elseif ($type == 'employe') {
@@ -80,6 +78,7 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('employe_autopart_default_index');
             }
         }
+
         $lesVoitures = $this->get("app.requete_base")->getLesVoituresByCateg($id);
         $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
 
@@ -95,6 +94,8 @@ class DefaultController extends Controller
      * @Route("/connect")
      */
     public function connectAction(Request $request){
+
+
         if($this->get('session')->isStarted()){
             $type = $this->get('session')->get('type');
 
@@ -109,28 +110,44 @@ class DefaultController extends Controller
         $formBuilder
             ->add('Login','Symfony\Component\Form\Extension\Core\Type\TextType')
             ->add('Password','Symfony\Component\Form\Extension\Core\Type\PasswordType')
-            ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+            ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType')
+            ->add('TypeUser','Symfony\Component\Form\Extension\Core\Type\ChoiceType',array(
+                'choices' => array('Utilisateur' => 'u', 'Employé' => 'e'),
+            ));
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $data = $form->getData();
+            $typeUtilisateur =$data['TypeUser'];
+            $res =  null;
 
-            $res =  $this->get("app.requete_base")->userConnexion($data['Login'],$data['Password']);
-
-            if(is_null($res)){
-                $this->get('session')->getFlashBag()->set('erreur', 'Combinaison utilisateur/mot de passe inconnue');
-
-                $session = $request->getSession();
-                $session->start();
-                $session->set('user',$res);
+            if($typeUtilisateur=='u'){
+               $res = $this->get("app.requete_base")->userConnexion($data['Login'],$data['Password']);
+                if(is_null($res)){
+                    $this->get('session')->getFlashBag()->set('erreur', 'Combinaison utilisateur/mot de passe inconnue');
+                }else{
+                    $session = $request->getSession();
+                    $session->start();
+                    $session->set('user',$res);
+                    $session->set('type','utilisateur');
+                    return $this->redirectToRoute("client_autopart_default_index");
+                }
+            }else if($typeUtilisateur=='e'){
+                $res =  $this->get("app.requete_base")->employeConnexion($data['Login'],$data['Password']);
+                if(is_null($res)){
+                    $this->get('session')->getFlashBag()->set('erreur', 'Combinaison utilisateur/mot de passe inconnue');
+                }else{
+                    $session = $request->getSession();
+                    $session->start();
+                    $session->set('user',$res);
+                    $session->set('type','employe');
+                    return $this->redirectToRoute("employe_autopart_default_index");
+                }
             }else{
-                $session = $request->getSession();
-                $session->start();
-                $session->set('user',$res);
-                $session->set('type','utilisateur');
-                return $this->redirectToRoute("client_autopart_default_index");
+                $this->get('session')->getFlashBag()->set('erreur', 'erreur d\'origine inconnue');
             }
+
         }
 
         return $this->render('BaseAutoPartBundle:Default:connection.html.twig',array(
@@ -198,6 +215,7 @@ class DefaultController extends Controller
      */
     public function disconnectAction(Request $request){
         $this->get('session')->invalidate();
+
         return $this->redirectToRoute("base_autopart_default_index");
     }
 }

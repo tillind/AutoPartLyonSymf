@@ -21,6 +21,11 @@ class DefaultController extends Controller
     {
         $lesStationChoice=null;
         $lesTypesVoituresChoice=null;
+
+
+
+
+
         $lesStations = $this->get("app.requete_employe")->getLesStations();
         $lesTypesVoitures = $this->get("app.requete_employe")->getLesTypesVoitures();
         $formBuilder = $this->get('form.factory')->createBuilder();
