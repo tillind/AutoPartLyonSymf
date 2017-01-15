@@ -43,6 +43,30 @@ class RequeteBdd
         return $date;
     }
 
+    //Récupère voiture disponible dans l'intervalle debut-fin
+    public function getLesVoitureByEtatAndCateg($etat, $categ){
+        $lesVoitures =array();
+        if($this->connexion instanceof \PDO){
+            $query="SELECT idvoiture, etatvoiture, datedebutassurance, datefinassurance,nbkilometre, numcartegrise,  idstation, codetypevoiture,nomVoiture FROM voiture where codetypevoiture=:categ";
+            if ($etat !=null){
+                $query .=" and etatvoiture= :etat";
+                $stmt = $this->connexion->prepare($query);
+                $stmt->bindParam(":categ",$categ,\PDO::PARAM_STR);
+                $stmt->bindParam(":etat",$etat,\PDO::PARAM_STR);
+            }
+            else{
+                $stmt = $this->connexion->prepare($query);
+                $stmt->bindParam(":categ",$categ,\PDO::PARAM_STR);
+            }
+            $stmt->execute();
+            foreach($stmt as $uneVoiture){
+                    $lesVoitures[]= new Voiture($uneVoiture[0],$uneVoiture[1],$uneVoiture[2],$uneVoiture[3],$uneVoiture[4],$uneVoiture[5],$uneVoiture[6],$uneVoiture[7],$uneVoiture[8]);
+            }
+        }
+
+
+        return $lesVoitures;
+    }
 
     public function getLesVoituresById($var){
         $lesVoiture =null;
@@ -55,13 +79,30 @@ class RequeteBdd
 
             foreach($stmt as $lavoiture){
                 $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[1],$lavoiture[2],$lavoiture[3],$lavoiture[4],$lavoiture[5],$lavoiture[6],$lavoiture[7],$lavoiture[8]);
-                $lesStations[]=array('nom'=>$lavoiture[9],'id'=> $lavoiture[0]);
+                $lesStations[]=array('nom'=>$lavoiture[9],'id'=> $lavoiture[6]);
             }
         };
         return $result=array($lesVoiture,$lesStations);
     }
     public function ajoutVehicule($arrayVehicule){
-        $stmt = $this->connexion->prepare("INSERT INTO public.voiture(idvoiture, etatvoiture, datedebutassurance, datefinassurance,nbkilometre, numcartegrise, proprietaire, idstation, codetypevoiture,nomVoiture) VALUES(
+
+
+
+
+
+
+       $stmt2=$this->connexion->prepare(" SELECT COUNT(*) FROM voiture WHERE idstation =:idstation");
+        $stmt2->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_STR);
+        $stmt2->execute();
+        $nbvoitureactuelle= $stmt2 -> fetch();
+        $stmt3=$this->connexion->prepare("SELECT capacite FROM station WHERE idstation =:idstation");
+        $stmt3->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_STR);
+        $stmt3->execute();
+        $nbvoituretotale = $stmt3 -> fetch();
+
+        if($nbvoitureactuelle['count']<$nbvoituretotale['capacite'])
+        {
+            $stmt = $this->connexion->prepare("INSERT INTO public.voiture(idvoiture, etatvoiture, datedebutassurance, datefinassurance,nbkilometre, numcartegrise, proprietaire, idstation, codetypevoiture,nomVoiture) VALUES(
             DEFAULT,
             :etat,
             :datedeb,
@@ -74,16 +115,18 @@ class RequeteBdd
             :nomvoiture
         );");
 
-        $stmt->bindParam(":etat",$arrayVehicule['etatvoiture'],\PDO::PARAM_STR);
-        $stmt->bindParam(":datedeb",$arrayVehicule['datedebutassurance'],\PDO::PARAM_STR);
-        $stmt->bindParam(":datefin",$arrayVehicule['datefinassurance'],\PDO::PARAM_STR);
-        $stmt->bindParam(":nbkilo",$arrayVehicule['nbkilometres'],\PDO::PARAM_STR);
-        $stmt->bindParam(":numcartegrise",$arrayVehicule['numcartegrise'],\PDO::PARAM_STR);
-        $stmt->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_STR);
-        $stmt->bindParam(":codetypevoiture",$arrayVehicule['codevoiture'],\PDO::PARAM_STR);
-        $stmt->bindParam(":nomvoiture",$arrayVehicule['nomvehicule'],\PDO::PARAM_STR);
-        $stmt->execute();
-        $row  = $stmt -> fetch();
+            $stmt->bindParam(":etat",$arrayVehicule['etatvoiture'],\PDO::PARAM_STR);
+            $stmt->bindParam(":datedeb",$arrayVehicule['datedebutassurance'],\PDO::PARAM_STR);
+            $stmt->bindParam(":datefin",$arrayVehicule['datefinassurance'],\PDO::PARAM_STR);
+            $stmt->bindParam(":nbkilo",$arrayVehicule['nbkilometres'],\PDO::PARAM_STR);
+            $stmt->bindParam(":numcartegrise",$arrayVehicule['numcartegrise'],\PDO::PARAM_STR);
+            $stmt->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_STR);
+            $stmt->bindParam(":codetypevoiture",$arrayVehicule['codevoiture'],\PDO::PARAM_STR);
+            $stmt->bindParam(":nomvoiture",$arrayVehicule['nomvehicule'],\PDO::PARAM_STR);
+            $stmt->execute();
+            $row  = $stmt -> fetch();
+        }
+
     }
     public function getLesCategVoiture(){
         $lesCategories =array();
@@ -115,17 +158,29 @@ class RequeteBdd
         }
         return $lesVoiture;
     }
-    public function modifVehicule($arrayVehicule){
+    public function modifVehicule($arrayVehicule,$station){
         $stmt = $this->connexion->prepare("UPDATE public.voiture SET etatvoiture=:etat, datedebutassurance=:datedeb, datefinassurance=:datefin, nbkilometre=:nbkilo, numcartegrise=:numcartegrise, proprietaire=TRUE, idstation=:idstation, codetypevoiture=:codetypevoiture, nomvoiture=:nomvoiture WHERE idvoiture=:idvoiture;");
         $stmt->bindParam(':etat',$arrayVehicule['etatvoiture'],\PDO::PARAM_STR);
         $stmt->bindParam(":datedeb",$arrayVehicule['datedebutassurance'],\PDO::PARAM_STR);
         $stmt->bindParam(":datefin",$arrayVehicule['datefinassurance'],\PDO::PARAM_STR);
         $stmt->bindParam(":nbkilo",$arrayVehicule['nbkilometres'],\PDO::PARAM_STR);
         $stmt->bindParam(":numcartegrise",$arrayVehicule['numcartegrise'],\PDO::PARAM_STR);
-        $stmt->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_INT);
+        $stmt->bindParam(":idstation",$station,\PDO::PARAM_INT);
         $stmt->bindParam(":codetypevoiture",$arrayVehicule['codevoiture'],\PDO::PARAM_STR);
         $stmt->bindParam(":nomvoiture",$arrayVehicule['nomvehicule'],\PDO::PARAM_STR);
         $stmt->bindParam(":idvoiture",$arrayVehicule['idvehicule'],\PDO::PARAM_INT);
         $stmt->execute();
+    }
+    public function deplacerVehicule($arrayStation,$idvoiture){
+        $stmt = $this->connexion->prepare("SELECT public.deplacement_voiture(
+            :idvoiture,
+            :idstation
+        );");
+        $stmt->bindParam(":idvoiture",$idvoiture);
+        $stmt->bindParam(":idstation",$arrayStation['idstation']);
+        $stmt->execute();
+        $row  = $stmt -> fetch();
+        return $row['deplacement_voiture'];
+
     }
 }

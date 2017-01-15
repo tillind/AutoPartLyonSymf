@@ -50,6 +50,8 @@ class DefaultController extends Controller
             ->add('etatvoiture', ChoiceType::class, array(
                 'choices'  => array(
                     'Bon' => 'Bon',
+                    'Moyen' => 'Moyen',
+                    'Bas' => 'Bas',
                     'En panne' => 'En panne',
                     'A supprimer' => 'Supprimer',
                 ),
@@ -97,43 +99,56 @@ class DefaultController extends Controller
      */
     public function rechercheAction(Request $request)
     {
-        // Récupération des catégories de voiture
-
+        $lesStationChoice = null;
+        $lesTypesVoituresChoice = null;
+        $lesStations = $this->get("app.requete_employe")->getLesStations();
         $lesCategories = $this->get("app.requete_employe")->getLesCategVoiture();
-        $lesCategories["Pas de préférence"]=null; //valeur par défaut
-
-        //création du formulaire
         $formBuilder = $this->get('form.factory')->createBuilder();
-        $formBuilder->add('categorie', ChoiceType::class, array(
-            'choices'  => $lesCategories,
-        ))
-            ->add('dateDebut',TextType::class,array('required' => false))
-            ->add('dateFin',TextType::class,array('required' => false))
-            ->add('submit',SubmitType::class);
-        $form = $formBuilder->getForm();
-        $form->handleRequest($request);
+        foreach ($lesStations as $station) {
+            $lesStationChoice[$station["nom"]] = $station["id"];
+        }
+        $formBuilder
+            ->add('etatvoiture', ChoiceType::class, array(
+                'choices'  => array(
+                    'Non spécifié' => null,
+                    'Bon' => 'Bon',
+                    'Moyen' => 'Moyen',
+                    'Bas' => 'Bas',
+                    'En panne' => 'En panne',
+                    'A supprimer' => 'Supprimer',
+                ),
+            ))
+            ->add('codevoiture', ChoiceType::class,
+                array(
+                    "attr" => array("class" => "form-control select2"),
+                    'choices'  => $lesCategories,
 
-        //TO DO: vérifier que dateFin> dateDebut
-        //TO DO: renvoyer vers la liste des voitures qui correspondent
-        //récupération des résultats du formulaire
-        $lesVoitures =array();
+                ))
+
+            ->add('submit', SubmitType::class);
+
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $data = $form->getData();
-            $dateDebut= $data['dateDebut'];
-            $dateFin= $data['dateFin'];
-            $cat= $data['categorie'];
-            //tableau des résultats des requête pour les dates et la catégorie
-            $lesVoitures = $this->get("app.requete_employe")->getLesVoitureByDateAndCateg($dateDebut,$dateFin,$cat);
+            $etat= $data['etatvoiture'];
+            $categ= $data['codevoiture'];
+            $result = $this->get("app.requete_employe")->getLesVoitureByEtatAndCateg($etat, $categ);
+            return $this->render('EmployeAutoPartBundle:Default:catalogue.html.twig', array(
+                "mesVoitures" => $result,
+                'form' => $form->createView()
+            ));
         }
 
-        //affichage du formulaire
-        return $this->render('EmployeAutoPartBundle:Default:recherche.html.twig',
-            array(
-                'form' => $form->createView(),
-                'lesVoitures'=>$lesVoitures
-            ));
-
+        return $this->render('EmployeAutoPartBundle:Default:recherche.html.twig', array(
+            "mesStations" => $lesStations,
+            "mesVoitures" => $lesCategories,
+            'form' => $form->createView()
+        ));
     }
+
     /**
      * @Route("/voiture/{id}")
      */
@@ -154,6 +169,64 @@ class DefaultController extends Controller
             array(
                 "mesVoitures"=>$lesVoitures,
             ));
+    }
+
+    /**
+     * @Route("/deplacerVoiture/{id}")
+     */
+    public function changerStationByIdAction(Request $request,$id=null)
+    {
+        $lesStationChoice = null;
+        $lesTypesVoituresChoice = null;
+        $lesDonneesPreRemplies=null;
+        $dates=null;
+        $lesStations = $this->get("app.requete_employe")->getLesStations();
+        $lesTypesVoitures = $this->get("app.requete_employe")->getLesCategVoiture();
+        $lesDonneesPreRemplies = $this->get("app.requete_employe")->getLesVoituresById($id);
+        foreach ($lesStations as $station) {
+            $lesStationChoice[$station["nom"]] = $station["id"];
+        }
+
+        foreach ($lesDonneesPreRemplies[0] as $voiture) {
+            $dates = $this->get("app.requete_employe")->getDateAsString("datedebutassurance","datefinassurance",$voiture->getDatedebutassurance());
+        }
+        $formBuilder = $this->get('form.factory')->createBuilder();
+        foreach ($lesDonneesPreRemplies[0] as $voiture) {
+            $formBuilder
+                ->add("idstation", ChoiceType::class,
+                array(
+                    'data' => $lesDonneesPreRemplies[1][0]['id'],
+                    "attr" => array("class" => "form-control select2"),
+                    'choices' => $lesStationChoice,
+
+                ))
+            ->add('submit', SubmitType::class);
+        }
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+
+            $result=$this->get("app.requete_employe")->deplacerVehicule($data,$lesDonneesPreRemplies[0][0]->getIdVoiture());
+            /*if($result == 2){
+                $this->get('session')->getFlashBag()->set('erreur', 'La station est pleine');
+            }*/
+            $lesVoitures = $this->get("app.requete_employe")->getLesVoituresById($id);
+
+
+            return $this->render('EmployeAutoPartBundle:Default:ficheVehicule.html.twig',
+                array(
+                    "mesVoitures"=>$lesVoitures,
+                ));
+        }
+
+        return $this->render('EmployeAutoPartBundle:Default:deplacerVehicule.html.twig', array(
+            "mesStations" => $lesStations,
+            "mesVoitures" => $lesTypesVoitures,
+            "mesDonnesPreRemplies" => $lesDonneesPreRemplies,
+            "mesStationsChoisies" => $lesStationChoice,
+            'form' => $form->createView()
+        ));
     }
     /**
      * @Route("/modifVoiture/{id}")
@@ -180,6 +253,8 @@ class DefaultController extends Controller
                 ->add('etatvoiture', ChoiceType::class, array(
                     'choices'  => array(
                         'Bon' => 'Bon',
+                        'Moyen' => 'Moyen',
+                        'Bas' => 'Bas',
                         'En panne' => 'En panne',
                         'A supprimer' => 'Supprimer',
                     ),'data' => $voiture->getEtatVoiture()
@@ -188,15 +263,10 @@ class DefaultController extends Controller
                 ->add('datefinassurance', TextType::class,array('data' => $dates['date2']))
                 ->add('nbkilometres', TextType::class, array('data' => $voiture->getNbkilometre()))
                 ->add('numcartegrise', TextType::class,array('data' => $voiture->getNumcartegrise()))
-                ->add("idstation", ChoiceType::class,
-                    array(
-                        'data' => $lesStationChoice[$lesDonneesPreRemplies[1][0]['nom']],
-                        "attr" => array("class" => "form-control select2"),
-                        'choices' => $lesStationChoice,
 
-                    ));
-                $formBuilder->add('codevoiture', ChoiceType::class,
+                ->add('codevoiture', ChoiceType::class,
                     array(
+                        'data' => $voiture-> getCodetypevoiture(),
                         "attr" => array("class" => "form-control select2"),
                         'choices' => $lesTypesVoitures,
 
@@ -206,13 +276,13 @@ class DefaultController extends Controller
                 ->add('submit', SubmitType::class);
 
         }
+
         $form = $formBuilder->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $data = $form->getData();
-
-            $this->get("app.requete_employe")->modifVehicule($data);
+            $this->get("app.requete_employe")->modifVehicule($data,$lesDonneesPreRemplies[1][0]['id']);
 
             $lesVoitures = $this->get("app.requete_employe")->getLesVoituresById($id);
 
