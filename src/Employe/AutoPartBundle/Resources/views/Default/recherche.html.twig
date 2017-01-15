@@ -5,24 +5,50 @@
 
 {% block body %}
 
-    <div id="page-wrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 >Les catégories de véhicules disponibles</h1>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <div class="col-md-3">
-            <p class="lead">Catégorie de véhicule<p>
-            <div class="list-group">
-                {% for uneCateg in mesCategories %}
-                    <a href="{{ path("employe_autopart_default_cataloguebycateg") }}/{{ uneCateg.cat }}" class="list-group-item">{{ uneCateg.lib }}</a>
-                {% endfor %}
+<div id="page-wrapper">
+    <div class="container">
+
+        <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">Sélectionnez les critères</div>
+                </div>
+                <div class="panel-body" >
+                    <form id="signupform" class="form-horizontal" role="form">
+
+                        <div class="form-group">
+                            <label for="categorie" class="col-md-5 control-label">Catégorie</label>
+                            <div class="col-md-7">
+                                {{ form_widget(form.categorie, {'attr': {'class': 'form-control','name':'categorie','placeholder':'Categorie'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateDebut" class="col-md-5 control-label">Date de début de la réservation</label>
+                            <div class="col-md-7">
+                                {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control datetimepicker','name':'dateDebut','placeholder':'Début de début'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFin" class="col-md-5 control-label">Date de fin de la réservation</label>
+                            <div class="col-md-7">
+                                {{ form_widget(form.dateFin, {'attr': {'class': 'form-control datetimepicker','name':'dateFin','placeholder':'Date de fin'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <!-- Button -->
+                            <div class="col-md-offset-5 col-md-7">
+                                {{ form_widget(form.submit, { 'label': 'Valider' ,'attr': {'class': 'form-btn btn-info'}  }) }}
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- jQuery -->
+</div>
+    {{ form_end(form) }}
 
 
 {%  endblock %}
