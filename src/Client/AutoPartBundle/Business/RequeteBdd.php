@@ -191,7 +191,7 @@ class RequeteBdd
         return null;
     }
 
-<<<<<<< HEAD
+
     /* Recupere les reservations d'un client*/
 
     public function getReservation($login){
@@ -206,7 +206,7 @@ class RequeteBdd
             return $row;
         }
     }
-=======
+
     /*Retourn un tableau contenant toutes les indisponibilités d'une voiture (réservation et intervention)
     */
     public function getIndispoById($id){
@@ -257,6 +257,4 @@ class RequeteBdd
         return $lesStations;
     }
 
-    
->>>>>>> origin/master
 }
