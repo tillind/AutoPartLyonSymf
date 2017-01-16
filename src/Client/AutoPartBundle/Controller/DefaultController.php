@@ -9,17 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    
 
     /**
      * @Route("/reservation")
      */
     public function reservationAction()
     {
-        if($this->get('session')->isStarted()){
+        if($this->get('session')->isStarted()&& is_null($this->get('session')->get('type'))){
             $type = $this->get('session')->get('type');
-
-
             if ($type == 'employe') {
                 return $this->redirectToRoute('employe_autopart_default_index');
             }

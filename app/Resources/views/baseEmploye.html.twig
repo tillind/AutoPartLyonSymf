@@ -3,13 +3,7 @@
     <head>
         <meta charset="UTF-8">
 
-        {% block javascripts %}
-            <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
-        {% endblock %}
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
         <title>
             {% block title %}
@@ -103,28 +97,49 @@
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Manager application <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse in">
                             <li>
-                                <a href="panels-wells.html">Gestion station</a>
+                                <a href="{{ path("employe_autopart_default_managestation") }}">Gestion station</a>
                             </li>
                             <li>
                                 <a href="buttons.html">Gestion type véhicule</a>
                             </li>
+                            <li>
+                                <a href="{{ path("employe_autopart_default_addcollaborator") }}">Ajout collaborateur</a>
+                            </li>
                         </ul>
-                        <!-- /.nav-second-level -->
                     </li>
                 </ul>
             </div>
-            <!-- /.sidebar-collapse -->
         </div>
-        <!-- /.navbar-static-side -->
     </nav>
-
-
+    {% if app.session.flashBag.has('success') %}
+        <div id="signupalert" class="alert alert-success">
+            {% for msg in app.session.flashBag.get('success') %}
+                <span>{{ msg }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% block body %}
+
     {% endblock %}
     </body>
 
+        <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
+        <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
+        <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
+        <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
+        <script src="{{ asset('bundles/cssEmploye/vendor/metisMenu/metisMenu.js') }}"></script>
+
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <!-- DataTables JavaScript -->
+        <script src="{{ asset('bundles/cssEmploye/vendor/datatables/js/jquery.dataTables.js') }}"></script>
+        <script src="{{ asset('bundles/cssEmploye/vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/cssEmploye/vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+        <script src="{{ asset('bundles/jsEmploye/sb-admin-2.js') }}"></script>
     {% block js %}
 
         
     {% endblock %}
+
 </html>

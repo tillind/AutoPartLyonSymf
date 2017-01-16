@@ -183,4 +183,67 @@ class RequeteBdd
         return $row['deplacement_voiture'];
 
     }
+
+    public function userEmploye($arrayEmpl){
+        $tmpPass =crypt($arrayEmpl['pass'],password_hash($arrayEmpl['pass'], PASSWORD_DEFAULT));
+
+
+        $stmt = $this->connexion->prepare("SELECT public.sp_inscription_employe(
+            :mail,
+            :nom,
+            :prenom,
+            :log,
+            :pass,
+            :adr,
+            :ddn,
+            :tel
+        );");
+
+        $stmt->bindParam(":log",$arrayEmpl['login'],\PDO::PARAM_STR);
+        $stmt->bindParam(":nom",$arrayEmpl['nom'],\PDO::PARAM_STR);
+        $stmt->bindParam(":prenom",$arrayEmpl['prenom'],\PDO::PARAM_STR);
+        $stmt->bindParam(":mail",$arrayEmpl['mail'],\PDO::PARAM_STR);
+        $stmt->bindParam(":tel",$arrayEmpl['tel'],\PDO::PARAM_STR);
+        $stmt->bindParam(":adr",$arrayEmpl['adresse'],\PDO::PARAM_STR);
+        $stmt->bindParam(":ddn",$arrayEmpl['birth']);
+        $stmt->bindParam(":pass",$tmpPass);
+
+
+
+        $stmt->execute();
+        $row  = $stmt -> fetch();
+        return $row['sp_inscription_employe'];
+    }
+
+    public function getStationEtOccupation(){
+        $lesStations=null;
+        $stmt = $this->connexion->query("SELECT station.idstation, station.nom,station.adresse,station.capacite ,0 as occuper  FROM STATION WHERE idstation NOT IN (SELECT idstation FROM VOITURE)
+                                        UNION
+                                        SELECT station.idstation, station.nom,station.adresse,station.capacite ,count(station.idstation) as occuper  FROM STATION JOIN VOITURE ON voiture.idstation = station.idstation GROUP BY station.idstation 
+                                        ");
+        $stmt->execute();
+        $row = $stmt->fetchAll();
+        foreach($row as $uneStation){
+            $lesStations[]= array($uneStation["idstation"],$uneStation["nom"],$uneStation["adresse"],$uneStation["capacite"],$uneStation["occuper"]);
+        }
+        return $lesStations;
+    }
+
+    public function insertStation($array){
+        $stmt = $this->connexion->prepare("INSERT INTO public.station(
+             nom, adresse, capacite)
+    VALUES ( :nom, :adresse, :capacite)");
+        $stmt->bindValue(":nom",$array["Nom"]);
+        $stmt->bindValue(":adresse",$array["adresse"]);
+        $stmt->bindValue(":capacite",$array["capacite"]);
+
+        $stmt->execute();
+    }
+
+    public function deleteStation($id){
+        $stmt = $this->connexion->prepare("DELETE FROM station WHERE idstation =:id");
+        $stmt->bindValue(":id",$id);
+        $stmt->execute();
+    }
+
 }
