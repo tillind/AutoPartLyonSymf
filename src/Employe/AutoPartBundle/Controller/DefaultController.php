@@ -24,10 +24,11 @@ class DefaultController extends Controller
             $type = $this->get('session')->get('type');
             if ($type == 'utilisateur') {
                 return $this->redirectToRoute('client_autopart_default_index');
-            } elseif ($type == 'employe') {
-                return $this->redirectToRoute('employe_autopart_default_index');
             }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
         }
+
         return $this->render('EmployeAutoPartBundle:Default:index.html.twig',
             array()
         );
@@ -38,6 +39,15 @@ class DefaultController extends Controller
      */
     public function ajoutAction(Request $request)
     {
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesStations = $this->get("app.requete_employe")->getLesStations();
@@ -99,6 +109,15 @@ class DefaultController extends Controller
      */
     public function rechercheAction(Request $request)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesStations = $this->get("app.requete_employe")->getLesStations();
@@ -154,6 +173,15 @@ class DefaultController extends Controller
      */
     public function voitureByIdAction($id=null)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         if($this->get('session')->isStarted()){
             $type = $this->get('session')->get('type');
             if ($type == 'utilisateur') {
@@ -176,6 +204,15 @@ class DefaultController extends Controller
      */
     public function changerStationByIdAction(Request $request,$id=null)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesDonneesPreRemplies=null;
@@ -233,6 +270,15 @@ class DefaultController extends Controller
      */
     public function modifVoitureByIdAction(Request $request,$id=null)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesDonneesPreRemplies=null;
@@ -306,14 +352,16 @@ class DefaultController extends Controller
      */
     public function catalogueByCategAction($id=null)
     {
-        if($this->get('session')->isStarted()){
+
+        if ($this->get('session')->isStarted()) {
             $type = $this->get('session')->get('type');
             if ($type == 'utilisateur') {
                 return $this->redirectToRoute('client_autopart_default_index');
-            } elseif ($type == 'employe') {
-                return $this->redirectToRoute('employe_autopart_default_index');
             }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
         }
+
         $lesVoitures = $this->get("app.requete_base")->getLesVoituresByCateg($id);
         $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
         return $this->render('EmployeAutoPartBundle:Default:catalogue.html.twig',
@@ -322,6 +370,14 @@ class DefaultController extends Controller
                 "lesCategs"=>$lesCateg
             )
         );
+    }
+
+    /**
+     * @Route("/manage_account/")
+     */
+    public function manageAccountAction(Request $request){
+
+        return null;
     }
 }
 
