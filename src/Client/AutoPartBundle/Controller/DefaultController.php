@@ -22,8 +22,33 @@ class DefaultController extends Controller
      */
     public function reservationAction()
     {
-        return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig');
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+
+
+            if ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+
+        }else {
+            return $this->redirectToRoute('base_autopart_default_index');
+        }
+
+        $login = $this->get('session')->get('user')['login'];
+        /*var_dump($this->get('session')->get('user'));
+        die;*/
+
+        $lesReservations = $this->get("app.requete_client")->getReservation($login);
+
+        return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig',
+            array(
+                "mesReservations"=>$lesReservations
+            )
+        );
+
+
     }
+
 
     /**
      * @Route("/profil")

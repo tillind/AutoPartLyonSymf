@@ -194,4 +194,19 @@ class RequeteBdd
             return (false);
         }
     }
+
+    /* Recupere les reservations d'un client*/
+
+    public function getReservation($login){
+        if($this->connexion instanceof \PDO){
+            $stmt = $this->connexion->prepare("SELECT idvoiture,etatreservation,idstationpartir,idstationarriver,datedebutreservation,datefinreservation,voiture.idvoiture,voiture.nomvoiture FROM reservation,voiture WHERE idmembre= (SELECT membre.idmembre FROM membre where membre.login= :log) AND reservation.idvoiture= voiture.idvoiture )";
+            $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
+            $stmt->execute();
+            $row = null;
+            foreach ($stmt as $ligne){
+                $row[] = $ligne;
+            }
+            return $row;
+        }
+    }
 }

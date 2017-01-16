@@ -1,1 +1,59 @@
-hello world !
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{{ asset('bundles/bootstrap-datetimepicker.min.css') }}">
+
+
+    <div class="container">
+        <div class="row">
+
+            {% for maReservation in mesReservations %}
+
+                <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="thumbnail">
+                        <p>Voici vos reservations</p>
+                        <div class="caption">
+
+                            <table>
+
+                                <tr>
+                                    <th>Voiture</th>
+                                    <th>Etat de la reservation</th>
+                                    <th>Station de depart</th>
+                                    <th>Station d'arriver</th>
+                                    <th>Debut de la reservation</th>
+                                    <th>Fin de la reservation</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>{{ maReservation.idreservation }}</td>
+                                    <td>{{ maReservation.etatreservation }}</td>
+                                    <td>{{ maReservation.idstationarriver }}</td>
+                                    <td>{{ maReservation.datedebutreservation }}</td>
+                                    <td>{{ maReservation.datefinreservation }}</td>
+                                    <td><input type="button" onclick="javascript:if(confirm('vous êtes sûr ?'))" value="Annuler"></td>
+                                </tr>
+
+                            </table>
+
+
+                            <h4><a href="#"></a>
+                            </h4>
+                        </div>
+
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}
