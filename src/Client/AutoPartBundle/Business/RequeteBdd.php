@@ -9,6 +9,7 @@
 
 namespace Client\AutoPartBundle\Business;
 use \DateTime;
+use \DateInterval;
 
 
 class RequeteBdd
@@ -170,7 +171,7 @@ class RequeteBdd
 
     if ($date1>=$date2 and $date1<=$date3){
         return (true);
-        }
+    }
     else{
         return (false);
         }
@@ -178,14 +179,66 @@ class RequeteBdd
 
 
     public function getVoitureById($id){
-
-        $query="SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.idvoiture=:id";
-        $stmt = $this->connexion->prepare($query);
-        $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
-        $stmt->execute();
-        foreach($stmt as $uneVoiture){
-            return (new Voiture($uneVoiture[0],$uneVoiture[2],$uneVoiture[1],$uneVoiture[3],$uneVoiture[4]));
+        if($this->connexion instanceof \PDO){
+            $query="SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.idvoiture=:id and voiture.codetypevoiture=typevoiture.code";
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
+            $stmt->execute();
+            foreach($stmt as $uneVoiture){
+                return (new Voiture($uneVoiture[0],$uneVoiture[2],$uneVoiture[1],$uneVoiture[3],$uneVoiture[4]));
+            }
         }
+        return null;
+    }
+
+    /*Retourn un tableau contenant toutes les indisponibilités d'une voiture (réservation et intervention)
+    */
+    public function getIndispoById($id){
+        $indisponibilite =array();
+
+        if($this->connexion instanceof \PDO){
+            $query="SELECT dateIntervention, dateFinIntervention FROM InterventionVoiture WHERE idVoiture= :id";
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
+            $stmt->execute();
+            foreach($stmt as $uneInter){
+                $debut = DateTime::createFromFormat("Y-m-d",$uneInter[0]);
+                $fin = DateTime::createFromFormat("Y-m-d",$uneInter[1]);
+                while ($debut <= $fin){
+                    $indisponibilite[]=$debut->format('Y-m-d');
+                    $debut->add(new DateInterval('P1D'));
+                }
+            }
+
+            $query2="SELECT dateDebutReservation, dateFinReservation FROM Reservation WHERE idVoiture= :id";
+            $stmt2 = $this->connexion->prepare($query2);
+            $stmt2->bindParam(":id",$id,\PDO::PARAM_STR);
+            $stmt2->execute();
+            foreach($stmt2 as $uneResa){
+                $debut = DateTime::createFromFormat("Y-m-d",$uneResa[0]);
+                $fin = DateTime::createFromFormat("Y-m-d",$uneResa[1]);
+                while ($debut <= $fin){
+                    $indisponibilite[]=$debut->format('Y-m-d');
+                    $debut->add(new DateInterval('P1D'));
+                }
+            }
+        }
+
+        return $indisponibilite;
+    }
+
+
+    public function getLesStations(){
+
+        $lesStations =array();
+        if($this->connexion instanceof \PDO){
+            $stmt = $this->connexion->query("SELECT idstation,nom,adresse FROM station")->fetchAll();
+            foreach($stmt as $lastation){
+                $nomAdresse=$lastation[1]." - ".$lastation[2];
+                $lesStations[$nomAdresse]= $lastation[0];
+            }
+        }
+        return $lesStations;
     }
 
     

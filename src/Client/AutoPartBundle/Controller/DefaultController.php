@@ -75,12 +75,38 @@ class DefaultController extends Controller
     /**
      * @Route("/client/{id}")
      */
-    public function consulerVoitureAction($id=null)
+    public function consulerVoitureAction(Request $request, $id=null)
     {
+        //informations de la voiture à afficher
         $maVoiture = $this->get("app.requete_client")->getVoitureById($id);
+        $indispo = $this->get("app.requete_client")->getIndispoById($id);
+        $lesStations = $this->get("app.requete_client")->getLesStations();
+
+
+        //création du formulaire (juste un bouton)
+        $formBuilder = $this->get('form.factory')->createBuilder();
+        $formBuilder->add('depart', ChoiceType::class, array(
+            'choices'  => $lesStations,
+            ))
+        ->add('arrivee', ChoiceType::class, array(
+            'choices'  => $lesStations,
+            ))
+        ->add('dateDebut','Symfony\Component\Form\Extension\Core\Type\TextType')
+        ->add('dateFin','Symfony\Component\Form\Extension\Core\Type\TextType')
+        ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted()) {
+            echo "ok";   
+        }
+
         return $this->render('ClientAutoPartBundle:Default:ficheVehicule.html.twig',
             array(
-                'maVoiture'=>$maVoiture
+                'maVoiture'=>$maVoiture,
+                'indispo'=>$indispo,
+                'form' => $form->createView()
             ));
     }
 }
