@@ -9,6 +9,7 @@
 namespace Base\AutoPartBundle\Business;
 
 class Voiture {
+
     private $idVoiture;
     private $etatVoiture;
     private $nomVoiture;

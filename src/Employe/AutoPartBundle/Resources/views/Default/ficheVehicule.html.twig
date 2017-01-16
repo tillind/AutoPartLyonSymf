@@ -29,7 +29,7 @@
 
                     <div class="col-md-8">
                         <h3>Description du véhicule</h3>
-                        <ul contenteditable="true">
+                        <ul>
                         {% for maVoiture in mesVoitures[0] %}
                             <li><h4>Id du véhicule : {{  maVoiture.idVoiture}}</h4> </li>
                             <li><h4>Etat du véhicule : {{  maVoiture.etatVoiture}}</h4></li>
@@ -39,9 +39,12 @@
                             <li><h4>Numéro de carte grise : {{  maVoiture.numcartegrise}}</h4></li>
                             <li><h4>Numéro de la station {{  maVoiture.idstation}}</h4></li>
                             {% for maVoituree in mesVoitures[1] %}
-                                <li><h4>Nom de la sation : {{  maVoituree.nom}}</h4></li>
+                                <li><h4>Nom de la station : {{  maVoituree.nom}}</h4></li>
                             {% endfor %}
                             <li><h4>Code Type: {{  maVoiture.codetypevoiture}}</h4></li>
+
+                            <a class="btn btn-primary" href="{{ path("employe_autopart_default_modifvoiturebyid") }}/{{ maVoiture.idVoiture }}" role="button">Modifier</a>
+                            <a class="btn btn-primary" href="{{ path("employe_autopart_default_changerstationbyid") }}/{{ maVoiture.idVoiture }}" role="button">Changer de station</a>
                         {% endfor %}
 
                         </ul>

@@ -1,0 +1,169 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="row">
+
+ <div class="col-md-3">
+  <a href="{{ path("client_autopart_default_profil") }}" class="list-group-item">Mon profil</a>
+  <a href="{{ path("client_autopart_default_reservation") }}" class="list-group-item">Mes réservations</a>
+  <a href="{{ path("client_autopart_default_index") }}" class="list-group-item">Recherher un véhicule</a>
+</div>
+
+<div class="col-md-9">
+
+  <link rel="stylesheet" href="{{ asset('bundles/cssClient/bootstrap-datetimepicker.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('bundles/cssClient/bootstrap-datetimepicker.css') }}">
+  <link rel="stylesheet" href="{{ asset('bundles/cssClient/vendor/font-awesome/css/font-awesome.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('bundles/cssClient/sb-admin-2.css') }}">
+  <link rel="stylesheet" href="{{ asset('bundles/cssEmploye/vendor/metisMenu/metisMenu.min.css') }}">
+
+
+    <div class="row">
+      <div class="col-md-8">
+        <h3>Description du véhicule</h3>
+        <ul contenteditable="true">
+          <li><h4>Nom du véhicule : {{  maVoiture.nomvoiture}}</h4> </li>
+          <li><h4>Etat du véhicule : {{  maVoiture.etatVoiture}}</h4></li>
+          <li><h4>Catégorie de véhicule: {{  maVoiture.type}}</h4></li>
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="row">
+      {{  form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+      <div class="panel panel-info">
+       <div class="panel-heading">
+         <div class="panel-title">Sélectionnez les critères</div>
+       </div>
+       <div class="panel-body" >
+         <form id="reservform" class="form-horizontal" role="form">
+
+
+          <div class="form-group">
+           <label for="depart" class="col-sm-3 control-label">Station de départ</label>
+           <div class="col-sm-7">
+             {{ form_widget(form.depart, {'attr': {'class': 'form-control','name':'depart','placeholder':'depart'}}) }}
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="arrivee" class="col-sm-3 control-label">Station d'arrivée</label>
+           <div class="col-sm-7">
+             {{ form_widget(form.arrivee, {'attr': {'class': 'form-control','name':'arrivee','placeholder':'arrivee'}}) }}
+           </div>
+         </div>
+
+
+         <div class="form-group">
+           <label for="dateDebut" class="col-sm-3 control-label">Début de la réservation</label>
+           <div class="col-sm-7">
+             {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control datetimepicker6', 'name':'dateDebut', 'placeholder':'Début de début'}}) }}
+           </div>
+          </div>
+
+          <div class="form-group">
+           <label for="dateFin" class="col-md-3 control-label">Fin de la réservation</label>
+           <div class="col-sm-7">
+             {{ form_widget(form.dateFin, {'attr': {'class': 'form-control datetimepicker7', 'name':'dateFin', 'placeholder':'Date de fin'}}) }}
+           </div>
+         </div>
+
+         <div class="form-group">
+           <!-- Button -->
+           <div class="col-md-offset-5 col-md-7">
+             {{ form_widget(form.submit, { 'label': 'Réserver' ,'attr': {'class': 'form-btn btn-info'}  }) }}
+           </div>
+         </div>
+
+       </form>
+
+
+     </div>
+   </div>
+
+   {{ form_end(form) }}
+ </div>
+
+</div>
+
+<div class="col-md-9">
+  {% for uneIndispo in indispo %}
+  <h4>{{ uneIndispo }}</h4>
+  {% endfor %}
+</div>
+
+
+
+</div>
+
+
+{% block js %}
+
+<script src="{{ asset('bundles/jsClient/moment.js') }}"></script>
+<script src="{{ asset('bundles/jsClient/moment-with-locales.js') }}"></script>
+<script src="{{ asset('bundles/jsClient/jquery.js') }}"></script>
+<script src="{{ asset('bundles/jsClient/bootstrap.js') }}"></script>
+<script src="{{ asset('bundles/jsClient/bootstrap-datetimepicker.js') }}"></script>
+<script>
+
+//var obj = <?php echo json_encode($indispo); ?>;
+/*for(var i=0;i<6;i++){
+        alert(obj[i]);
+    }*/
+
+$(function () {
+
+ $indispo=['2017-01-15','2017-01-17'];
+
+ $('.datetimepicker6').datetimepicker({
+  disabledDates: $indispo,
+  locale: 'fr',
+  showClear: true,
+  icons: {
+     time: 'fa fa-clock-o',
+     date: 'fa fa-calendar',
+     up: 'fa fa-chevron-up',
+     down: 'fa fa-chevron-down',
+     previous: 'fa fa-chevron-left',
+     next: 'fa fa-chevron-right',
+     today: 'fa fa-crosshairs',
+     clear: 'fa fa-trash'
+   }
+ });
+
+
+ $('.datetimepicker7').datetimepicker({
+   useCurrent: false,
+   locale: 'fr',
+   showClear: true,
+   icons: {
+     time: 'fa fa-clock-o',
+     date: 'fa fa-calendar',
+     up: 'fa fa-chevron-up',
+     down: 'fa fa-chevron-down',
+     previous: 'fa fa-chevron-left',
+     next: 'fa fa-chevron-right',
+     today: 'fa fa-crosshairs',
+     clear: 'fa fa-trash'
+   }
+ });
+
+
+$(".datetimepicker6").on("dp.change", function (e) {
+            $('.datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+$(".datetimepicker7").on("dp.change", function (e) {
+            $('.datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+
+
+});
+</script>
+
+{% endblock %}
+
+
+
+{% endblock %}

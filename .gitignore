@@ -13,4 +13,6 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
-/web/bundles/
+
+
+src/Employe/AutoPartBundle/Controller/DefaultController.php

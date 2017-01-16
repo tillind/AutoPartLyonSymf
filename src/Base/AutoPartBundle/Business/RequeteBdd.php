@@ -19,7 +19,7 @@ class RequeteBdd
     }
 
     public function userConnexion($login,$pwd){
-        $tmpPass =crypt($pwd,password_hash($pwd, PASSWORD_DEFAULT));
+
 
         $stmt = $this->connexion->prepare("SELECT public.sp_verif_connect_membre(:log)");
         $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
@@ -34,8 +34,27 @@ class RequeteBdd
 
     }
 
+    public function employeConnexion($login,$pwd){
+
+
+        $stmt = $this->connexion->prepare("SELECT public.sp_verif_connect_employe(:log)");
+        $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
+        $stmt->execute();
+        $row  = $stmt -> fetch();
+        if(is_null($row['sp_verif_connect_employe'])){
+            return null;
+        }
+        if(hash_equals($row['sp_verif_connect_employe'], crypt($pwd,$row['sp_verif_connect_employe']))){
+            return $this->getEmploye($login);
+        }else{
+            return null;
+        }
+
+    }
     public function userInscription($arrayUser){
         $tmpPass =crypt($arrayUser['pass'],password_hash($arrayUser['pass'], PASSWORD_DEFAULT));
+
+
         $stmt = $this->connexion->prepare("SELECT public.sp_inscription_membre(
             :mail,
             :nom,
@@ -110,7 +129,13 @@ class RequeteBdd
         }
         return $lesCategories;
     }
-
+    private function getEmploye($login){
+        $stmt = $this->connexion->prepare("SELECT login, nom, prenom, mail, telephone, adresse, datedenaissance FROM public.employe WHERE login=:log");
+        $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
+        $stmt->execute();
+        $row  = $stmt -> fetch();
+        return $row;
+    }
     private function getMembre($login){
         $stmt = $this->connexion->prepare("SELECT login, nom, prenom, mail, telephone, adresse, datedenaissance, typepermis, dateinscription FROM public.membre WHERE login=:log");
         $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
