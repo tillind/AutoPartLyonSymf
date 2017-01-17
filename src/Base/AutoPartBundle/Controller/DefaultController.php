@@ -189,13 +189,13 @@ class DefaultController extends Controller
         if ($form->isSubmitted()) {
             $data = $form->getData();
             if($data['pass'] != $data['repPass']){
-                $this->get('session')->getFlashBag()->set('erreur', 'Les mots de passes ne sont pas identique');
+                $this->get('session')->getFlashBag()->set('erreur', 'Les mots de passe ne sont pas identiques');
             }else{
                 $result = $this->get("app.requete_base")->userInscription($data);
                 if($result == 2){
                     $this->get('session')->getFlashBag()->set('erreur', 'L\'email existe deja');
                 } else if($result ==1) {
-                    $this->get('session')->getFlashBag()->set('success', 'L\'inscription à étais effectué avec succée vous pouvez désormer vous connecter');
+                    $this->get('session')->getFlashBag()->set('success', 'L\'inscription a été effectuée avec succès, vous pouvez désormais vous connecter');
                     return $this->redirectToRoute("base_autopart_default_index");
                 }else{
                     $this->get('session')->getFlashBag()->set('erreur', 'Quelque chose de mal s\'est passé');

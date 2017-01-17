@@ -79,12 +79,12 @@
                <div class="form-group">
                    <label for="dateDebut" class="control-label">Dates de la réservation</label>
                    <div>
-                       {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control datetimepicker', 'name':'dateDebut', 'placeholder':'Début de début'}}) }}
+                       {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control datetimepicker1', 'name':'dateDebut', 'placeholder':'Début de début'}}) }}
                    </div>
 
                    <!--  <label for="dateFin" class="col-md-5 control-label">Date de fin de la réservation</label> -->
                    <div>
-                       {{ form_widget(form.dateFin, {'attr': {'class': 'form-control datetimepicker', 'name':'dateFin', 'placeholder':'Date de fin'}}) }}
+                       {{ form_widget(form.dateFin, {'attr': {'class': 'form-control datetimepicker2', 'name':'dateFin', 'placeholder':'Date de fin'}}) }}
                    </div>
                </div>
 
@@ -139,7 +139,26 @@
 <script src="{{ asset('bundles/jsClient/bootstrap-datetimepicker.js') }}"></script>
 <script>
 $(function () {
-   $('.datetimepicker').datetimepicker({
+
+  $('.datetimepicker1').datetimepicker({
+  locale: 'fr',
+  showClear: true,
+  icons: {
+     time: 'fa fa-clock-o',
+     date: 'fa fa-calendar',
+     up: 'fa fa-chevron-up',
+     down: 'fa fa-chevron-down',
+     previous: 'fa fa-chevron-left',
+     next: 'fa fa-chevron-right',
+     today: 'fa fa-crosshairs',
+     clear: 'fa fa-trash'
+   }
+ });
+
+
+
+   $('.datetimepicker2').datetimepicker({
+       useCurrent: false,
        locale: 'fr',
        showClear: true,
        icons: {
@@ -153,6 +172,15 @@ $(function () {
            clear: 'fa fa-trash'
        }
    });
+
+
+
+   $(".datetimepicker1").on("dp.change", function (e) {
+            $('.datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+  $(".datetimepicker2").on("dp.change", function (e) {
+            $('.datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        });
 
 });
 </script>
