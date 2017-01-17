@@ -9,14 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    
 
     /**
      * @Route("/reservation")
      */
     public function reservationAction()
     {
-        if($this->get('session')->isStarted()){
+        if($this->get('session')->isStarted()&& is_null($this->get('session')->get('type'))){
             $type = $this->get('session')->get('type');
             if ($type == 'employe') {
                 return $this->redirectToRoute('employe_autopart_default_index');
@@ -26,19 +25,121 @@ class DefaultController extends Controller
         }
 
         $login = $this->get('session')->get('user')['login'];
+
         /*var_dump($this->get('session')->get('user'));
         die;*/
 
         $lesReservations = $this->get("app.requete_client")->getReservation($login);
+/*        $formBuilder = $this->get('form.factory')->createBuilder();
+        $formBuilder->add('etatDesLieux','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data= $form->getData();
+            $etatDesLieux= $data['etatDesLieux'];
+        }*/
 
         return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig',
             array(
-                "mesReservations"=>$lesReservations
+                "mesReservations"=>$lesReservations,
+            //    'form' => $form->createView()
+
             )
         );
 
 
+
     }
+
+
+    /**
+     * @Route("/etatdeslieux/{idreservation}")
+     */
+    public function etatdeslieuxAction($idreservation=null,Request $request)
+    {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+
+
+            if ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+
+        }else {
+            return $this->redirectToRoute('base_autopart_default_index');
+        }
+
+        $login = $this->get('session')->get('user')['login'];
+        //$this->get("app.requete_client")->annulerReservation($idreservation);
+        //$lesReservations=null;
+
+        //$lesReservations = $this->get("app.requete_client")->getReservation($login);
+        $formBuilder = $this->get('form.factory')->createBuilder();
+        $formBuilder->add('etatDesLieux','Symfony\Component\Form\Extension\Core\Type\TextareaType')
+            ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data= $form->getData();
+            $etatDesLieux= $data['etatDesLieux'];
+            return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig',
+                array(
+                    "mesReservations" => $this->get("app.requete_client")->getReservation($login)
+                )
+            );
+
+        }
+        return $this->render('ClientAutoPartBundle:Default:etatDesLieux.html.twig',
+            array(
+                "mesReservations" => $this->get("app.requete_client")->getReservation($login),
+                'form' => $form->createView()
+            )
+        );
+
+
+
+    }
+
+
+    /**
+     * @Route("/annuler/{idreservation}")
+     */
+    public function annulerAction($idreservation=null)
+    {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+
+
+            if ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+
+        }else {
+            return $this->redirectToRoute('base_autopart_default_index');
+        }
+
+        $login = $this->get('session')->get('user')['login'];
+        $this->get("app.requete_client")->annulerReservation($idreservation);
+        //$lesReservations=null;
+        return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig',
+            array(
+                "mesReservations" => $this->get("app.requete_client")->getReservation($login)
+            )
+        );
+
+
+
+    }
+
+
+
+
+
 
 
     /**

@@ -143,4 +143,6 @@ class RequeteBdd
         $row  = $stmt -> fetch();
         return $row;
     }
+
+
 }

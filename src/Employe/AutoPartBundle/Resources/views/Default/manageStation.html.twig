@@ -1,0 +1,97 @@
+{% extends "baseEmploye.html.twig" %}
+
+
+
+{% block body %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Gestion des stations</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Ajouter une station
+                </div>
+                <div class="panel-body">
+                    {{ form_start(form, {'attr': {'class': 'form-vertical'}}) }}
+                    {{ form_widget(form.Nom, {'attr': {'class': 'form-control','name':'nom','placeholder':'nom de la station'}}) }}
+                    {{ form_widget(form.adresse, {'attr': {'class': 'form-control','name':'nom','placeholder':'adresse de la station'}}) }}
+                    {{ form_widget(form.capacite, {'attr': {'class': 'form-control','name':'nom','placeholder':'capacité de la station'}}) }}
+                    {{ form_widget(form.submit, { 'label': 'Enregistrement' ,'attr': {'class': 'form-btn btn-info'}  }) }}
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Liste des stations
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                        <tr>
+                            <th>Numéro de station</th>
+                            <th>Nom</th>
+                            <th>Adresse</th>
+                            <th>Capacité théorique</th>
+                            <th>Utilisé</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+</div>
+<!-- /#page-wrapper -->
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function() {
+        var table = $('#dataTables-example').DataTable({
+            responsive: true,
+            "ajax":'{{ path("employe_autopart_default_ajxstation") }}',
+            "columnDefs": [ {
+                "targets": -1,
+                "data": null,
+                "defaultContent": "<button>Supprimer</button>"
+            } ]
+        });
+        $('#dataTables-example').on( 'click', 'button', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            if(data[4]>0){
+                alert("Vous ne pouvez pas supprimer une station ou un ou plusieurs véhicules sont affecté. ");
+            }else{
+                $.ajax({
+                    url : '{{ path("employe_autopart_default_ajxsupprstation") }}/',
+                    type : 'GET', // Le type de la requête HTTP.
+                    data : 'idstation=' + data[0],
+                    success : function(code_html, statut){
+                        table.ajax.reload();
+                    },
+                    error : function(resultat, statut, erreur){
+                        alert("Erreur inconnue");
+                    }
+                });
+            }
+
+        } );
+
+    });
+</script>
+{% endblock %}

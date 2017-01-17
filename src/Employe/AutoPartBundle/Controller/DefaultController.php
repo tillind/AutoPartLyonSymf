@@ -13,6 +13,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
 class DefaultController extends Controller
 {
     /**
@@ -24,10 +27,11 @@ class DefaultController extends Controller
             $type = $this->get('session')->get('type');
             if ($type == 'utilisateur') {
                 return $this->redirectToRoute('client_autopart_default_index');
-            } elseif ($type == 'employe') {
-                return $this->redirectToRoute('employe_autopart_default_index');
             }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
         }
+
         return $this->render('EmployeAutoPartBundle:Default:index.html.twig',
             array()
         );
@@ -38,6 +42,15 @@ class DefaultController extends Controller
      */
     public function ajoutAction(Request $request)
     {
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesStations = $this->get("app.requete_employe")->getLesStations();
@@ -99,6 +112,15 @@ class DefaultController extends Controller
      */
     public function rechercheAction(Request $request)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesStations = $this->get("app.requete_employe")->getLesStations();
@@ -154,6 +176,15 @@ class DefaultController extends Controller
      */
     public function voitureByIdAction($id=null)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         if($this->get('session')->isStarted()){
             $type = $this->get('session')->get('type');
             if ($type == 'utilisateur') {
@@ -176,6 +207,15 @@ class DefaultController extends Controller
      */
     public function changerStationByIdAction(Request $request,$id=null)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesDonneesPreRemplies=null;
@@ -233,6 +273,15 @@ class DefaultController extends Controller
      */
     public function modifVoitureByIdAction(Request $request,$id=null)
     {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
         $lesStationChoice = null;
         $lesTypesVoituresChoice = null;
         $lesDonneesPreRemplies=null;
@@ -306,14 +355,16 @@ class DefaultController extends Controller
      */
     public function catalogueByCategAction($id=null)
     {
-        if($this->get('session')->isStarted()){
+
+        if ($this->get('session')->isStarted()) {
             $type = $this->get('session')->get('type');
             if ($type == 'utilisateur') {
                 return $this->redirectToRoute('client_autopart_default_index');
-            } elseif ($type == 'employe') {
-                return $this->redirectToRoute('employe_autopart_default_index');
             }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
         }
+
         $lesVoitures = $this->get("app.requete_base")->getLesVoituresByCateg($id);
         $lesCateg = $this->get("app.requete_base")->getLesCategVoiture();
         return $this->render('EmployeAutoPartBundle:Default:catalogue.html.twig',
@@ -322,6 +373,94 @@ class DefaultController extends Controller
                 "lesCategs"=>$lesCateg
             )
         );
+    }
+
+    /**
+     * @Route("/add_collaborator")
+     */
+    public function addCollaboratorAction(Request $request){
+        $formBuilder= $this->get("form.factory")->createBuilder();
+        $formBuilder->add('login','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('pass','Symfony\Component\Form\Extension\Core\Type\PasswordType')
+            ->add('repPass','Symfony\Component\Form\Extension\Core\Type\PasswordType')
+            ->add('nom','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('prenom','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('mail','Symfony\Component\Form\Extension\Core\Type\EmailType')
+            ->add('tel','Symfony\Component\Form\Extension\Core\Type\NumberType')
+            ->add('adresse','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('birth','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('save','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+
+        $form= $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+            if($data['pass'] != $data['repPass']){
+                $this->get('session')->getFlashBag()->set('erreur', 'Les mots de passes ne sont pas identique');
+            }else{
+                $result = $this->get("app.requete_employe")->userEmploye($data);
+                if($result == 2){
+                    $this->get('session')->getFlashBag()->set('erreur', 'L\'email existe deja');
+                } else if($result ==1) {
+                    $this->get('session')->getFlashBag()->set('success', 'L\'inscription à étais effectué avec succée vous pouvez désormer vous connecter');
+                    return $this->redirectToRoute("employe_autopart_default_index");
+                }else{
+                    $this->get('session')->getFlashBag()->set('erreur', 'Quelque chose de mal s\'est passé');
+                }
+            }
+        }
+        return $this->render("EmployeAutoPartBundle:Default:addCollab.html.twig",array(
+            "form"=>$form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/manage_station")
+     */
+    public function manageStationAction(Request $request){
+        $formBuilder= $this->get("form.factory")->createBuilder();
+        $formBuilder->add('Nom','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('adresse','Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('capacite','Symfony\Component\Form\Extension\Core\Type\NumberType')
+            ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
+
+        $form= $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+            $this->get("app.requete_employe")->insertStation($data);
+        }
+        return $this->render("@EmployeAutoPart/Default/manageStation.html.twig",array(
+            "form"=> $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/ajx_station")
+     *
+     */
+    public function ajxStationAction(){
+        return new JsonResponse(array('data' => $this->get("app.requete_employe")->getStationEtOccupation()));
+    }
+    /**
+     * @Route("/ajx_suppr_station/")
+     *
+     */
+    public function ajxSupprStationAction(Request $request){
+        $id = $request->query->get('idstation');
+        $this->get("app.requete_employe")->deleteStation($id);
+        return new Response(1);
+    }
+    /**
+     * @Route("/manage_account/")
+     */
+    public function manageAccountAction(Request $request){
+
+        return null;
     }
 }
 
