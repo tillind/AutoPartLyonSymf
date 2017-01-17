@@ -3,7 +3,23 @@
     <head>
         <meta charset="UTF-8">
 
+        {% block javascripts %}
+            <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/metisMenu.min.js') }}"></script>
 
+            <script src="{{ asset('bundles/jsEmploye/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+            <script src="{{ asset('bundles/jsEmploye/vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+            <script src="{{ asset('bundles/jsEmploye/sb-admin-2.js') }}"></script>
+
+        {% endblock %}
+
+
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         <title>
             {% block title %}
@@ -14,7 +30,8 @@
 
         {% stylesheets 'bundles/cssEmploye/vendor/bootstrap/css/bootstrap.min.css'
         'bundles/cssEmploye/bootstrap-datetimepicker.css'
-
+        'bundles/cssEmploye/vendor/datatables-plugins/dataTables.bootstrap.css'
+        'bundles/cssEmploye/vendor/datatables-responsive/dataTables.responsive.css'
         'bundles/cssEmploye/vendor/metisMenu/metisMenu.min.css'
         'bundles/cssEmploye/vendor/font-awesome/css/font-awesome.min.css'
         'bundles/cssEmploye/sb-admin-2.css'
@@ -72,9 +89,7 @@
                             <li>
                                 <a  href="{{ path("employe_autopart_default_recherche") }}"><i class="fa fa-dashboard fa-fw"></i> Rechercher un véhicule</a>
                             </li>
-                            <li>
-                                <a  href="{{ path("employe_autopart_default_recherche") }}"><i class="fa fa-dashboard fa-fw"></i> Intervention véhicule</a>
-                            </li>
+
 
                         </ul>
                     </li>
@@ -82,13 +97,10 @@
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Gestion reservation <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse in">
                             <li>
-                                <a  href="{{ path("employe_autopart_default_ajout") }}"><i class="fa fa-dashboard fa-fw"></i> Reservation en attente</a>
+                                <a  href="{{ path("employe_autopart_default_resas") }}"><i class="fa fa-dashboard fa-fw"></i> Reservations</a>
                             </li>
                             <li>
-                                <a  href="{{ path("employe_autopart_default_recherche") }}"><i class="fa fa-dashboard fa-fw"></i> Reservation en cours</a>
-                            </li>
-                            <li>
-                                <a  href="{{ path("employe_autopart_default_recherche") }}"><i class="fa fa-dashboard fa-fw"></i> Historique reservation</a>
+                                <a  href="{{ path("employe_autopart_default_historiqueresas") }}"><i class="fa fa-dashboard fa-fw"></i> Historique reservation</a>
                             </li>
 
                         </ul>
@@ -100,46 +112,25 @@
                                 <a href="{{ path("employe_autopart_default_managestation") }}">Gestion station</a>
                             </li>
                             <li>
-                                <a href="buttons.html">Gestion type véhicule</a>
-                            </li>
-                            <li>
                                 <a href="{{ path("employe_autopart_default_addcollaborator") }}">Ajout collaborateur</a>
                             </li>
                         </ul>
+                        <!-- /.nav-second-level -->
                     </li>
                 </ul>
             </div>
+            <!-- /.sidebar-collapse -->
         </div>
+        <!-- /.navbar-static-side -->
     </nav>
-    {% if app.session.flashBag.has('success') %}
-        <div id="signupalert" class="alert alert-success">
-            {% for msg in app.session.flashBag.get('success') %}
-                <span>{{ msg }}</span>
-            {% endfor %}
-        </div>
-    {% endif %}
-    {% block body %}
 
+
+    {% block body %}
     {% endblock %}
     </body>
 
-        <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
-        <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
-        <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
-        <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
-        <script src="{{ asset('bundles/cssEmploye/vendor/metisMenu/metisMenu.js') }}"></script>
-
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-        <!-- DataTables JavaScript -->
-        <script src="{{ asset('bundles/cssEmploye/vendor/datatables/js/jquery.dataTables.js') }}"></script>
-        <script src="{{ asset('bundles/cssEmploye/vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
-        <script src="{{ asset('bundles/cssEmploye/vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
-
-        <script src="{{ asset('bundles/jsEmploye/sb-admin-2.js') }}"></script>
     {% block js %}
 
-        
-    {% endblock %}
 
+    {% endblock %}
 </html>
