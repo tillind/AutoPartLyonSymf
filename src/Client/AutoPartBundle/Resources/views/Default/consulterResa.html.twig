@@ -8,31 +8,50 @@
     <div class="container">
         <div class="row">
 
+            <p>Voici vos reservations</p>
+
+            <table>
+                <tr>
+                    <th>Voiture</th>
+                    <th>Etat de la reservation</th>
+                    <th>Station de depart</th>
+                    <th>Station d'arriver</th>
+                    <th>Debut de la reservation</th>
+                    <th>Fin de la reservation</th>
+                    <th></th>
+                </tr>
+
+
+
+
             {% for maReservation in mesReservations %}
 
                 <div class="col-sm-4 col-lg-4 col-md-4">
                     <div class="thumbnail">
-                        <p>Voici vos reservations</p>
+
                         <div class="caption">
 
                             <table>
 
+
                                 <tr>
-                                    <th>Voiture</th>
-                                    <th>Etat de la reservation</th>
-                                    <th>Station de depart</th>
-                                    <th>Station d'arriver</th>
-                                    <th>Debut de la reservation</th>
-                                    <th>Fin de la reservation</th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <td>{{ maReservation.idreservation }}</td>
+                                    <td>{{ maReservation.nomvoiture }}</td>
                                     <td>{{ maReservation.etatreservation }}</td>
-                                    <td>{{ maReservation.idstationarriver }}</td>
+                                    <td>{{ maReservation.nomstationp }}</td>
+                                    <td>{{ maReservation.nomstationa }}</td>
                                     <td>{{ maReservation.datedebutreservation }}</td>
                                     <td>{{ maReservation.datefinreservation }}</td>
-                                    <td><input type="button" onclick="javascript:if(confirm('vous êtes sûr ?'))" value="Annuler"></td>
+
+                                    {% if maReservation.etatreservation =='en attente' %}
+
+                                        <td><a class="btn btn-primary" href="{{ path("client_autopart_default_annuler") }}/{{ maReservation.idreservation }}" role="button">Annuler</a></td>
+
+                                    {% elseif maReservation.etatreservation =='cloturee' and maReservation.idetatdeslieux==null %}
+                                        <td><a class="btn btn-primary" href="{{ path("client_autopart_default_etatdeslieux") }}/{{ maReservation.idreservation }}" role="button">Etat des lieux</a></td>
+
+                                    {% endif %}
+
+
                                 </tr>
 
                             </table>
@@ -46,6 +65,7 @@
                 </div>
 
             {% endfor %}
+            </table>
 
         </div>
     </div>

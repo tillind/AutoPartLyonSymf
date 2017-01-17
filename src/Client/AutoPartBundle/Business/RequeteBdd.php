@@ -196,7 +196,7 @@ class RequeteBdd
 
     public function getReservation($login){
         if($this->connexion instanceof \PDO){
-            $stmt = $this->connexion->prepare("SELECT idvoiture,etatreservation,idstationpartir,idstationarriver,datedebutreservation,datefinreservation,voiture.idvoiture,voiture.nomvoiture FROM reservation,voiture WHERE idmembre= (SELECT membre.idmembre FROM membre where membre.login= :log) AND reservation.idvoiture= voiture.idvoiture )";
+            $stmt = $this->connexion->prepare("SELECT reservation.idreservation,reservation.idvoiture,etatreservation,reservation.idstationpartir,reservation.idstationarriver,datedebutreservation,datefinreservation,voiture.idvoiture,voiture.nomvoiture,reservation.idetatdeslieux,stationPartir.nom as nomStationP,stationArriver.nom as nomStationA FROM reservation,voiture,station as stationPartir, station as stationArriver WHERE idmembre= (SELECT membre.idmembre FROM membre where membre.login= :log) AND reservation.idvoiture= voiture.idvoiture AND reservation.idstationpartir = stationPartir.idstation AND reservation.idstationarriver = stationArriver.idstation");
             $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
             $stmt->execute();
             $row = null;
@@ -206,6 +206,22 @@ class RequeteBdd
             return $row;
         }
     }
+
+    /* Change l'etat "en cours" à "annuler"*/
+
+    public function annulerReservation($idreservation){
+        if($this->connexion instanceof \PDO) {
+            $stmt = $this->connexion->prepare("UPDATE reservation SET etatreservation = 'annuler' WHERE reservation.idreservation= :res");
+            $stmt->bindParam(":res", $idreservation, \PDO::PARAM_STR);
+            $stmt->execute();
+
+
+        }
+    }
+
+
+
+
 
     /*Retourn un tableau contenant toutes les indisponibilités d'une voiture (réservation et intervention)
     */
