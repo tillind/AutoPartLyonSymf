@@ -9,6 +9,8 @@
 namespace Employe\AutoPartBundle\Business;
 
 
+use Client\AutoPartBundle\Business\Reservation;
+
 class RequeteBdd
 {
     private $connexion = null;
@@ -85,12 +87,6 @@ class RequeteBdd
         return $result=array($lesVoiture,$lesStations);
     }
     public function ajoutVehicule($arrayVehicule){
-
-
-
-
-
-
        $stmt2=$this->connexion->prepare(" SELECT COUNT(*) FROM voiture WHERE idstation =:idstation");
         $stmt2->bindParam(":idstation",$arrayVehicule['idstation'],\PDO::PARAM_STR);
         $stmt2->execute();
@@ -136,8 +132,6 @@ class RequeteBdd
             foreach($stmt as $uneCateg){
                 $lesCategories[$uneCateg[1]]= $uneCateg[0];
             }
-        }else{
-            //  echo"un probleme";die;
         }
         return $lesCategories;
     }
@@ -183,8 +177,29 @@ class RequeteBdd
         return $row['deplacement_voiture'];
 
     }
+    public function getLesResas(){
+        $lesReservations =array();
+        if($this->connexion instanceof \PDO) {
+            $stmt = $this->connexion->query("SELECT idreservation, etatreservation, datedebutreservation, datefinreservation, nbkilometreparcouru,  idstationpartir, idstationarriver, idmembre, idvoiture FROM reservation")->fetchAll();
+            foreach ($stmt as $lareservation) {
 
-    public function userEmploye($arrayEmpl){
+                $lesReservations[] = $lareservation;
+            }
+        }
+        return $lesReservations;
+    }
+    public function getHistoriqueResas(){
+        $lesReservations =array();
+        if($this->connexion instanceof \PDO) {
+            $stmt = $this->connexion->query("SELECT idreservation, etatreservation, datedebutreservation, datefinreservation, nbkilometreparcouru,  idstationpartir, idstationarriver, idmembre, idvoiture FROM historiquereservation")->fetchAll();
+            foreach ($stmt as $lareservation) {
+
+                $lesReservations[] = $lareservation;
+            }
+        }
+        return $lesReservations;
+    }
+     public function userEmploye($arrayEmpl){
         $tmpPass =crypt($arrayEmpl['pass'],password_hash($arrayEmpl['pass'], PASSWORD_DEFAULT));
 
 
@@ -245,5 +260,6 @@ class RequeteBdd
         $stmt->bindValue(":id",$id);
         $stmt->execute();
     }
+
 
 }

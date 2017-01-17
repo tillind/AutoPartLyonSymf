@@ -13,9 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-
 class DefaultController extends Controller
 {
     /**
@@ -185,14 +182,6 @@ class DefaultController extends Controller
         }else{
             return $this->redirectToRoute("base_autopart_default_index");
         }
-        if($this->get('session')->isStarted()){
-            $type = $this->get('session')->get('type');
-            if ($type == 'utilisateur') {
-                return $this->redirectToRoute('client_autopart_default_index');
-            } elseif ($type == 'employe') {
-                return $this->redirectToRoute('employe_autopart_default_index');
-            }
-        }
         $lesVoitures = $this->get("app.requete_employe")->getLesVoituresById($id);
 
 
@@ -201,6 +190,46 @@ class DefaultController extends Controller
                 "mesVoitures"=>$lesVoitures,
             ));
     }
+
+    /**
+     * @Route("/resas")
+     */
+    public function resasAction(Request $request){
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+        $lesResas = $this->get("app.requete_employe")->getLesResas();
+        return $this->render('EmployeAutoPartBundle:Default:ficheResa.html.twig',
+            array(
+                "mesReservations"=>$lesResas,
+            ));
+    }
+
+    /**
+     * @Route("/historiqueresas")
+     */
+    public function historiqueresasAction(Request $request){
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+        $lesResas = $this->get("app.requete_employe")->getHistoriqueResas();
+        return $this->render('EmployeAutoPartBundle:Default:ficheResa.html.twig',
+            array(
+                "mesReservations"=>$lesResas,
+            ));
+    }
+
+
 
     /**
      * @Route("/deplacerVoiture/{id}")
@@ -350,6 +379,65 @@ class DefaultController extends Controller
             'form' => $form->createView()
         ));
     }
+
+
+
+    /**
+     * @Route("/reparationbyid/{id}")
+     */
+    public function reparationByIdAction(Request $request,$id=null)
+    {
+
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+
+        $formBuilder = $this->get('form.factory')->createBuilder();
+            $formBuilder
+
+                ->add('datedebutintervention', TextType::class)
+                ->add('datefinintervention', TextType::class)
+                ->add('typeintervention', ChoiceType::class,
+                    array(
+                        'choices'  => array(
+                            'Accident' => 'Accident',
+                            'Entretien' => 'Entretien',
+                        )
+                    ))
+                ->add('descriptif', TextType::class)
+                ->add('numcartegrise', TextType::class)
+                ->add('submit', SubmitType::class);
+
+
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+
+
+            $lesVoitures = $this->get("app.requete_employe")->getLesVoituresById($id);
+
+
+            return $this->render('EmployeAutoPartBundle:Default:ficheVehicule.html.twig',
+                array(
+                    "mesVoitures"=>$lesVoitures,
+                ));
+        }
+
+        return $this->render('EmployeAutoPartBundle:Default:ficheIntervention.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+
+
     /**
      * @Route("/catalogue/{id}")
      */
@@ -374,7 +462,6 @@ class DefaultController extends Controller
             )
         );
     }
-
     /**
      * @Route("/add_collaborator")
      */

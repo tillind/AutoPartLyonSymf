@@ -1,0 +1,143 @@
+
+{% extends "baseEmploye.html.twig" %}
+
+
+
+{% block body %}
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 >Formulaire d'intervention de véhicule</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Informations nécessaires pour une intervention
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!--  <form role="form">-->
+                            {{ form_start(form) }}
+
+
+                            <label>Dates d'intervention du véhicule</label>
+                            <div class="container" style="margin-left:-30px">
+
+                                <div class='col-md-2'>
+                                    <div class="form-group">
+
+                                        <div class='input-group date' id='datetimepicker6'>
+                                            <!-- <input type='text' class="form-control" />-->
+                                            {{ form_widget(form.datedebutintervention, {'attr': {'class': 'form-control',}}) }}
+                                            <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-2'>
+                                    <div class="form-group">
+                                        <div class='input-group date' id='datetimepicker7'>
+
+                                            <!--<input type='text' class="form-control" />-->
+                                            {{ form_widget(form.datefinintervention, {'attr': {'class': 'form-control',}}) }}
+                                            <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Type d'intervention</label>
+                                <!-- <input class="form-control" placeholder="Nombre de kilomètres">-->
+                                {{ form_widget(form.typeintervention, {'attr': {'class': 'form-control','placeholder':'Nombre de kilomètres'}})}}
+                            </div>
+                            <div class="form-group">
+                                <label>Descriptif</label>
+                                <!--<input class="form-control" placeholder="Numéro de carte grise">-->
+                                {{ form_widget(form.descriptif, {'attr': {'class': 'form-control','placeholder':'Descriptif'}})}}
+                            </div>
+
+                            <div class="form-group">
+                                <label>Numéro de carte grise</label>
+                                <!--<input class="form-control" placeholder="Numéro de carte grise">-->
+                                {{ form_widget(form.numcartegrise, {'attr': {'class': 'form-control','placeholder':'Numéro de carte grise'}})}}
+                            </div>
+                            <!--<button type="submit" class="btn btn-default">Ajouter</button>-->
+                            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label': 'Ajouter le véhicule'}) }}
+                            </form>
+                        </div>
+                        <!-- /.col-lg-6 (nested) -->
+
+                        </form>
+                    </div>
+                    <!-- /.col-lg-6 (nested) -->
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+</div>
+
+
+<!-- jQuery -->
+{% endblock %}
+{%  block js %}
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker6').datetimepicker({
+            viewMode: 'days',
+            format: 'DD/MM/YYYY',
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-crosshairs',
+                clear: 'fa fa-trash'
+            }
+        });
+
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            viewMode: 'days',
+            format: 'DD/MM/YYYY',
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-crosshairs',
+                clear: 'fa fa-trash'
+            }
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+
+</script>
+{%  endblock %}
+
