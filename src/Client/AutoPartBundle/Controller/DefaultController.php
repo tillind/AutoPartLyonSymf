@@ -18,12 +18,9 @@ class DefaultController extends Controller
     {
         if($this->get('session')->isStarted()){
             $type = $this->get('session')->get('type');
-
-
             if ($type == 'employe') {
                 return $this->redirectToRoute('employe_autopart_default_index');
             }
-
         }else {
             return $this->redirectToRoute('base_autopart_default_index');
         }
@@ -58,8 +55,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // Récupération des catégories de voiture
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+            if ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }else {
+            return $this->redirectToRoute('base_autopart_default_index');
+        }
 
+        // Récupération des catégories de voiture
         $lesCategories = $this->get("app.requete_client")->getLesCategVoiture();
         $lesCategories["Pas de préférence"]=null; //valeur par défaut
 
@@ -74,8 +79,7 @@ class DefaultController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
-            //TO DO: vérifier que dateFin> dateDebut
-            //TO DO: renvoyer vers la liste des voitures qui correspondent
+            
         //récupération des résultats du formulaire
         $lesVoitures =array();
         if ($form->isSubmitted()) {
@@ -102,6 +106,15 @@ class DefaultController extends Controller
      */
     public function consulerVoitureAction(Request $request, $id=null)
     {
+        if($this->get('session')->isStarted()){
+            $type = $this->get('session')->get('type');
+            if ($type == 'employe') {
+                return $this->redirectToRoute('employe_autopart_default_index');
+            }
+        }else {
+            return $this->redirectToRoute('base_autopart_default_index');
+        }
+
         //informations de la voiture à afficher
         $maVoiture = $this->get("app.requete_client")->getVoitureById($id);
         $indispo = $this->get("app.requete_client")->getIndispoById($id);
@@ -118,13 +131,28 @@ class DefaultController extends Controller
             ))
         ->add('dateDebut','Symfony\Component\Form\Extension\Core\Type\TextType')
         ->add('dateFin','Symfony\Component\Form\Extension\Core\Type\TextType')
+        ->add('nbKil','Symfony\Component\Form\Extension\Core\Type\IntegerType', array(
+    'attr' => array('max' => 999999)))
         ->add('submit','Symfony\Component\Form\Extension\Core\Type\SubmitType');
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
 
         if ($form->isSubmitted()) {
-            echo "ok";   
+            $data = $form->getData();
+            $depart= $data['depart'];
+            $arrivee= $data['arrivee'];
+            $debut= $data['dateDebut'];
+            $fin= $data['dateFin'];
+            $nbKil= $data['nbKil'];  
+            $login = $this->get('session')->get('user')['login'];
+            $res=$this->get("app.requete_client")->addResa($debut,$fin,$nbKil,$depart,$arrivee,$login,$id);
+            if ($res){
+                return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig');
+            }
+            else{
+                $this->get('session')->getFlashBag()->set('erreur', 'Choix de dates impossibles');
+            }
         }
 
         return $this->render('ClientAutoPartBundle:Default:ficheVehicule.html.twig',

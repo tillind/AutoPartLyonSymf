@@ -21,6 +21,8 @@ class RequeteBdd
            $this->connexion = $connect->getPdo();
     }
     
+    /*Renvoie un tableau contenant toutes les voitures
+    */
     public function getLesVoitures(){
         $lesVoiture =array();
 
@@ -35,6 +37,8 @@ class RequeteBdd
         return $lesVoiture;
     }
 
+    /*Renvoie toutes les voitures d'une catégorie
+    */
     public function getLesVoituresByCateg($var){
         $lesVoiture =array();
 
@@ -52,6 +56,8 @@ class RequeteBdd
         return $lesVoiture;
     }
 
+    /*Renvoie toutes les catégories de voitures sous la forme [libelle,code]
+    */
     public function getLesCategVoiture(){
         $lesCategories =array();
 
@@ -67,7 +73,7 @@ class RequeteBdd
     }
 
 
-    //Récupère voiture disponible dans l'intervalle debut-fin
+    //Récupère voitures disponibles dans l'intervalle debut-fin
     public function getLesVoitureByDateAndCateg($dateDebut, $dateFin, $categ){
         $lesVoitures =array();
 
@@ -112,29 +118,47 @@ class RequeteBdd
     */
     private function checkVoiture($id, $date, $fin){
         $available=true;
-        /*Recuperation de toutes les interventions de cette voiture*/
-        $query="SELECT dateIntervention, dateFinIntervention FROM InterventionVoiture WHERE idVoiture= :id";
-        $stmt = $this->connexion->prepare($query);
-        $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
-        $stmt->execute();
-        foreach($stmt as $uneInter){
-            /*Si une intervention chevauche les dates en paramètre, la voiture n'est pas dispo*/ 
-            if ($this->checkDate($date, $fin, $uneInter[0], $uneInter[1])==false){
-                return (false);
-            }
-        }
+        //mise en forme des dates de résa choisies
+        $newDate = str_replace('/', '-', $date);
+        $date1 = DateTime::createFromFormat("d-m-Y H:i",$newDate);
+        $newFin = str_replace('/', '-', $fin);
+        $date2 = DateTime::createFromFormat("d-m-Y H:i",$newFin);
 
-        /*Indentique avec les réservations*/ 
-        $query2="SELECT dateDebutReservation, dateFinReservation FROM Reservation WHERE idVoiture= :id";
-        $stmt2 = $this->connexion->prepare($query2);
-        $stmt2->bindParam(":id",$id,\PDO::PARAM_STR);
-        $stmt2->execute();
-        foreach($stmt2 as $uneResa){
-            if ($this->checkDate($date, $fin, $uneResa[0], $uneResa[1])==false){
-                return (false);
+        if ($date1 <= $date2){
+            /*Recuperation de toutes les interventions de cette voiture*/
+            $query="SELECT dateIntervention, dateFinIntervention FROM InterventionVoiture WHERE idVoiture= :id";
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
+            $stmt->execute();
+            foreach($stmt as $uneInter){
+                /*Si une intervention chevauche les dates en paramètre, la voiture n'est pas dispo*/
+                $newDebutInter = str_replace('/', '-', $uneInter[0]);
+                $date3 = DateTime::createFromFormat("Y-m-d",$newDebutInter);
+                $newFinInter = str_replace('/', '-', $uneInter[1]);
+                $date4 = DateTime::createFromFormat("Y-m-d",$newFinInter);
+                if ($this->checkDate($date1, $date2, $date3, $date4)==false){
+                    return (false);
+                }
             }
+
+            /*Indentique avec les réservations*/ 
+            $query2="SELECT dateDebutReservation, dateFinReservation FROM Reservation WHERE idVoiture= :id";
+            $stmt2 = $this->connexion->prepare($query2);
+            $stmt2->bindParam(":id",$id,\PDO::PARAM_STR);
+            $stmt2->execute();
+            foreach($stmt2 as $uneResa){
+                $newDebutResa = str_replace('/', '-', $uneResa[0]);
+                $date3 = DateTime::createFromFormat("Y-m-d H:i:s",$newDebutResa);
+                $newFinResa = str_replace('/', '-', $uneResa[1]);
+                $date4 = DateTime::createFromFormat("Y-m-d H:i:s",$newFinResa);
+                if ($this->checkDate($date1, $date2, $date3, $date4)==false){
+                    return (false);
+                }
+            }
+            return $available;
         }
-        return $available;
+        //si début >= fin
+        return false;
     }
 
     /* Retour: booleen
@@ -158,18 +182,12 @@ class RequeteBdd
     Faux sinon
      */ 
     private function dateIn($date, $debut, $fin){        
-
-    $newDebut = str_replace('/', '-', $debut);
-    $date2 = DateTime::createFromFormat("Y-m-d",$newDebut);
-
-    $newFin = str_replace('/', '-', $fin);
-    $date3 = DateTime::createFromFormat("Y-m-d",$newFin);
-
-    $newDate = str_replace('/', '-', $date);
-    $date1 = DateTime::createFromFormat('m-d-Y H:i',$newDate);
-
-
-    if ($date1>=$date2 and $date1<=$date3){
+     
+    //echo $date->format('Y-m-d');
+    //echo $debut->format('Y-m-d');
+    //echo $fin->format('Y-m-d');
+    
+    if ($date>=$debut and $date<=$fin){
         return (true);
     }
     else{
@@ -196,7 +214,7 @@ class RequeteBdd
 
     public function getReservation($login){
         if($this->connexion instanceof \PDO){
-            $stmt = $this->connexion->prepare("SELECT idvoiture,etatreservation,idstationpartir,idstationarriver,datedebutreservation,datefinreservation,voiture.idvoiture,voiture.nomvoiture FROM reservation,voiture WHERE idmembre= (SELECT membre.idmembre FROM membre where membre.login= :log) AND reservation.idvoiture= voiture.idvoiture )";
+            $stmt = $this->connexion->prepare("SELECT idvoiture,etatreservation,idstationpartir,idstationarriver,datedebutreservation,datefinreservation,voiture.idvoiture,voiture.nomvoiture FROM reservation,voiture WHERE idmembre= (SELECT membre.idmembre FROM membre where membre.login= :log) AND reservation.idvoiture= voiture.idvoiture");
             $stmt->bindParam(":log",$login,\PDO::PARAM_STR);
             $stmt->execute();
             $row = null;
@@ -231,8 +249,8 @@ class RequeteBdd
             $stmt2->bindParam(":id",$id,\PDO::PARAM_STR);
             $stmt2->execute();
             foreach($stmt2 as $uneResa){
-                $debut = DateTime::createFromFormat("Y-m-d",$uneResa[0]);
-                $fin = DateTime::createFromFormat("Y-m-d",$uneResa[1]);
+                $debut = DateTime::createFromFormat("Y-m-d H:i:s",$uneResa[0]);
+                $fin = DateTime::createFromFormat("Y-m-d H:i:s",$uneResa[1]);
                 while ($debut <= $fin){
                     $indisponibilite[]=$debut->format('Y-m-d');
                     $debut->add(new DateInterval('P1D'));
@@ -243,7 +261,8 @@ class RequeteBdd
         return $indisponibilite;
     }
 
-
+    /*Retourne tous les stations sous la forme [nom-adresse, id]
+    */
     public function getLesStations(){
 
         $lesStations =array();
@@ -255,6 +274,49 @@ class RequeteBdd
             }
         }
         return $lesStations;
+    }
+
+    /*Ajoute une réservation
+    Retourne true si l'insertion s'est effectuée
+    False sinon
+    */
+    public function addResa($debut,$fin,$nbKil,$depart,$arrivee,$login,$idvoiture){
+        if($this->connexion instanceof \PDO){
+            $id=$this->getIdMembre($login);
+            if ($id !=null){
+                //vérification que la voiture est disponible aux dates demandées
+                $available=$this->checkVoiture($idvoiture,$debut,$fin);
+                if ($available){
+                    $query="INSERT INTO reservation (etatreservation, datedebutreservation,datefinreservation,nbkilometreparcouru,idetatdeslieux,idstationpartir,idstationarriver, idmembre, idvoiture) values('en cours',:deb,:fin,:nbKil,null,:depart,:arrivee,:id,:voiture)";
+                    $stmt = $this->connexion->prepare($query);
+                    $stmt->bindParam(":deb",$debut,\PDO::PARAM_STR);
+                    $stmt->bindParam(":fin",$fin,\PDO::PARAM_STR);
+                    $stmt->bindParam(":nbKil",$nbKil,\PDO::PARAM_STR);
+                    $stmt->bindParam(":depart",$depart,\PDO::PARAM_STR);
+                    $stmt->bindParam(":arrivee",$arrivee,\PDO::PARAM_STR);
+                    $stmt->bindParam(":id",$id,\PDO::PARAM_STR);
+                    $stmt->bindParam(":voiture",$idvoiture,\PDO::PARAM_STR);
+                    $stmt->execute();
+                    return true;
+                }   
+            }
+        }
+        return false;
+    }
+
+    /*Retourne l'id du membre dont le login est $login
+    */
+    private function getIdMembre ($login){
+        if($this->connexion instanceof \PDO){
+            $query="SELECT idmembre from membre where login=:login";
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(":login",$login,\PDO::PARAM_STR);
+            $stmt->execute();
+            foreach($stmt as $membre){
+                return $membre[0];
+            }
+        }
+        return null;
     }
 
 }

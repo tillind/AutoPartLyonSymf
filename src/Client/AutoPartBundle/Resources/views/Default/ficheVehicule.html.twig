@@ -22,7 +22,7 @@
     <div class="row">
       <div class="col-md-8">
         <h3>Description du véhicule</h3>
-        <ul contenteditable="true">
+        <ul>
           <li><h4>Nom du véhicule : {{  maVoiture.nomvoiture}}</h4> </li>
           <li><h4>Etat du véhicule : {{  maVoiture.etatVoiture}}</h4></li>
           <li><h4>Catégorie de véhicule: {{  maVoiture.type}}</h4></li>
@@ -39,6 +39,18 @@
        </div>
        <div class="panel-body" >
          <form id="reservform" class="form-horizontal" role="form">
+
+          {% if app.session.flashBag.has('erreur') %}
+          <div id="signupalert"  class="alert alert-danger">
+            {{ form_widget(form._token) }}
+            {% for flashMessage in app.session.flashbag.get('erreur') %}
+            <p>Erreur:</p>
+            <span>{{ flashMessage }}</span>
+
+            {% endfor %}
+          </div>
+          {% endif %}
+
 
 
           <div class="form-group">
@@ -71,6 +83,13 @@
          </div>
 
          <div class="form-group">
+           <label for="nbKil" class="col-md-3 control-label">Nombre de kilomètres estimés</label>
+           <div class="col-sm-7">
+             {{ form_widget(form.nbKil, {'attr': {'class': 'form-control', 'name':'nbKil', 'placeholder':'Nombre de kilomètres parcourus'}}) }}
+           </div>
+         </div>
+
+         <div class="form-group">
            <!-- Button -->
            <div class="col-md-offset-5 col-md-7">
              {{ form_widget(form.submit, { 'label': 'Réserver' ,'attr': {'class': 'form-btn btn-info'}  }) }}
@@ -84,20 +103,18 @@
    </div>
 
    {{ form_end(form) }}
+
+
  </div>
 
 </div>
 
-<div class="col-md-9">
-  {% for uneIndispo in indispo %}
-  <h4>{{ uneIndispo }}</h4>
-  {% endfor %}
-</div>
-
-
 
 </div>
 
+<!--{% for ind in indispo %}
+{{ ind }}
+{% endfor %}-->
 
 {% block js %}
 
@@ -108,16 +125,11 @@
 <script src="{{ asset('bundles/jsClient/bootstrap-datetimepicker.js') }}"></script>
 <script>
 
-//var obj = <?php echo json_encode($indispo); ?>;
-/*for(var i=0;i<6;i++){
-        alert(obj[i]);
-    }*/
 
 $(function () {
 
- $indispo=['2017-01-15','2017-01-17'];
-
- $('.datetimepicker6').datetimepicker({
+$indispo={{ indispo|json_encode|raw }};
+$('.datetimepicker6').datetimepicker({
   disabledDates: $indispo,
   locale: 'fr',
   showClear: true,
@@ -136,6 +148,7 @@ $(function () {
 
  $('.datetimepicker7').datetimepicker({
    useCurrent: false,
+   disabledDates: $indispo,
    locale: 'fr',
    showClear: true,
    icons: {
