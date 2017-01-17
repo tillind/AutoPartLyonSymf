@@ -4,72 +4,64 @@
 
     <link rel="stylesheet" href="{{ asset('bundles/bootstrap-datetimepicker.min.css') }}">
 
+    <div class="col-md-3">
 
-    <div class="container">
-        <div class="row">
+        <a href="{{ path("client_autopart_default_reservation") }}" class="list-group-item">Mes réservations</a>
 
-            <p>Voici vos reservations</p>
-
-            <table>
-                <tr>
-                    <th>Voiture</th>
-                    <th>Etat de la reservation</th>
-                    <th>Station de depart</th>
-                    <th>Station d'arriver</th>
-                    <th>Debut de la reservation</th>
-                    <th>Fin de la reservation</th>
-                    <th></th>
-                </tr>
-
-
-
-
-            {% for maReservation in mesReservations %}
-
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-
-                        <div class="caption">
-
-                            <table>
-
-
-                                <tr>
-                                    <td>{{ maReservation.nomvoiture }}</td>
-                                    <td>{{ maReservation.etatreservation }}</td>
-                                    <td>{{ maReservation.nomstationp }}</td>
-                                    <td>{{ maReservation.nomstationa }}</td>
-                                    <td>{{ maReservation.datedebutreservation }}</td>
-                                    <td>{{ maReservation.datefinreservation }}</td>
-
-                                    {% if maReservation.etatreservation =='en attente' %}
-
-                                        <td><a class="btn btn-primary" href="{{ path("client_autopart_default_annuler") }}/{{ maReservation.idreservation }}" role="button">Annuler</a></td>
-
-                                    {% elseif maReservation.etatreservation =='cloturee' and maReservation.idetatdeslieux==null %}
-                                        <td><a class="btn btn-primary" href="{{ path("client_autopart_default_etatdeslieux") }}/{{ maReservation.idreservation }}" role="button">Etat des lieux</a></td>
-
-                                    {% endif %}
-
-
-                                </tr>
-
-                            </table>
-
-
-                            <h4><a href="#"></a>
-                            </h4>
-                        </div>
-
-                    </div>
-                </div>
-
-            {% endfor %}
-            </table>
-
-        </div>
+        <a href="{{ path("client_autopart_default_index") }}" class="list-group-item">Recherher un véhicule</a>
     </div>
 
+    <div class="col-md-9">
+        <p>Voici vos reservations</p>
+    </div>
+</div>
+
+
+<div class="row">
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>Voiture</th>
+            <th>Etat de la reservation</th>
+            <th>Station de depart</th>
+            <th>Station d'arriver</th>
+            <th>Debut de la reservation</th>
+            <th>Fin de la reservation</th>
+            <th></th>
+        </tr>
+
+
+        {% for maReservation in mesReservations %}
+
+        <tr>
+            <td>{{ maReservation.nomvoiture }}</td>
+            <td>{{ maReservation.etatreservation }}</td>
+            <td>{{ maReservation.nomstationp }}</td>
+            <td>{{ maReservation.nomstationa }}</td>
+            <td>{{ maReservation.datedebutreservation }}</td>
+            <td>{{ maReservation.datefinreservation }}</td>
+
+            {% if maReservation.etatreservation =='en attente' %}
+
+            <td><a class="btn btn-primary" href="{{ path("client_autopart_default_annuler") }}/{{ maReservation.idreservation }}" role="button">Annuler</a></td>
+
+            {% elseif maReservation.etatreservation =='cloturee' and maReservation.idetatdeslieux==null %}
+            <td><a class="btn btn-primary" href="{{ path("client_autopart_default_etatdeslieux") }}/{{ maReservation.idreservation }}" role="button">Etat des lieux</a></td>
+
+            {% else %}
+
+            <td> </td>
+
+            {% endif %}
+
+
+        </tr>
+
+
+        {% endfor %}
+    </table>
+</div>
+</div>
 
 {% endblock %}
 

@@ -15,7 +15,7 @@ class DefaultController extends Controller
      */
     public function reservationAction()
     {
-        if($this->get('session')->isStarted()&& is_null($this->get('session')->get('type'))){
+        if($this->get('session')->isStarted()){
             $type = $this->get('session')->get('type');
             if ($type == 'employe') {
                 return $this->redirectToRoute('employe_autopart_default_index');
@@ -137,19 +137,6 @@ class DefaultController extends Controller
     }
 
 
-
-
-
-
-
-    /**
-     * @Route("/profil")
-     */
-    public function profilAction()
-    {
-        //TO DO: créer & changer twig
-        return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig');
-    }
 
     /**
      * @Route("/client")

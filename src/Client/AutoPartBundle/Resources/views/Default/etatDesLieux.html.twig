@@ -2,12 +2,16 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{{ asset('bundles/bootstrap-datetimepicker.min.css') }}">
+<div class="row">
 
+    <div class="col-md-3">
+        <a href="{{ path("client_autopart_default_reservation") }}" class="list-group-item">Mes réservations</a>
 
-    <div class="container">
-        <div class="row">
+        <a href="{{ path("client_autopart_default_index") }}" class="list-group-item">Recherher un véhicule</a>
+    </div>
 
+    <div class="col-md-9">
+        <div class="container">
             <p>Spécifiez les changements de la voiture:</p>
             <ul TYPE="square">
                 <li>Etat de la carosserie</li>
@@ -19,40 +23,28 @@
                 <li>Etat des pneus</li>
                 <li>Autre détails à signaler</li>
             </ul>
-
-
-
-
-
-            {% for maReservation in mesReservations %}
-
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-
-                        <div class="caption">
-
-
-                            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-                                <div class="form-group">
-                                    {{ form_widget(form.etatDesLieux, {'attr': {'class': 'form-control','name':'depart','placeholder':'Spécifiez ici','cols': '50','rows':'25'}}) }}
-                                </div class="form-group">
-
-                                <div class="form-group">
-                                    {{ form_widget(form.submit, { 'label': 'Valider' ,'attr': {'class': 'form-btn btn-info'}  }) }}
-                                </div class="form-group">
-
-                            {{ form_end(form) }}
-
-
-                        </div>
-
-                    </div>
-                </div>
-
-                {% endfor %}
         </div>
     </div>
+</div>
 
+
+<div class="row">
+
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    <div class="form-group">
+        {{ form_widget(form.etatDesLieux, {'attr': {'class': 'form-control','name':'depart','placeholder':'Spécifiez ici','cols': '40','rows':'20'}}) }}
+    </div class="form-group">
+
+    <div class="form-group col-md-offset-5">
+        {{ form_widget(form.submit, { 'label': 'Valider' ,'attr': {'class': 'form-btn btn-info'}  }) }}
+    </div class="form-group">
+
+    {{ form_end(form) }}
+
+
+
+
+     </div>           
 
 {% endblock %}
 
