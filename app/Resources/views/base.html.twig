@@ -31,25 +31,15 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    {% if app.session.isstarted() and app.session.get('type')=='utilisateur' %}
-                        <li>
-                             <a href="{{ path("client_autopart_default_reservation") }}"> Bonjour {{ app.session.get('user')['login'] }}</a>
-                         </li>
-                        <li>
-                            <a href="{{ path("base_autopart_default_disconnect") }}">Déconnexion</a>
-                        </li>
-
-                    {% else %}
-                        <li>
-                            <a href="{{ path("base_autopart_default_catalogue")  }}">Catalogue</a>
-                        </li>
-                        <li>
-                            <a href="{{ path("base_autopart_default_inscription") }}">Inscription</a>
-                        </li>
-                        <li>
-                            <a href="{{ path("base_autopart_default_connect") }}">Connexion</a>
-                        </li>
-                    {% endif %}
+                    <li>
+                        <a href="{{ path("base_autopart_default_catalogue")  }}">Catalogue</a>
+                    </li>
+                    <li>
+                        <a href="{{ path("base_autopart_default_inscription") }}">Inscription</a>
+                    </li>
+                    <li>
+                        <a href="{{ path("base_autopart_default_connect") }}">Connexion</a>
+                    </li>
                     <li>
                         <a href="#">Contact</a>
                     </li>
