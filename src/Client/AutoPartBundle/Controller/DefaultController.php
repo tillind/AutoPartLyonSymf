@@ -87,6 +87,7 @@ class DefaultController extends Controller
         if ($form->isSubmitted()) {
             $data= $form->getData();
             $etatDesLieux= $data['etatDesLieux'];
+            $lesReservations = $this->get("app.requete_client")->addEtat($idreservation, $etatDesLieux);
             return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig',
                 array(
                     "mesReservations" => $this->get("app.requete_client")->getReservation($login)

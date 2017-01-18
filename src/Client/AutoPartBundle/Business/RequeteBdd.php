@@ -233,7 +233,7 @@ class RequeteBdd
 
     public function annulerReservation($idreservation){
         if($this->connexion instanceof \PDO) {
-            $stmt = $this->connexion->prepare("UPDATE reservation SET etatreservation = 'annuler' WHERE reservation.idreservation= :res");
+            $stmt = $this->connexion->prepare("UPDATE reservation SET etatreservation = 'annulee' WHERE reservation.idreservation= :res");
             $stmt->bindParam(":res", $idreservation, \PDO::PARAM_STR);
             $stmt->execute();
 
@@ -337,6 +337,18 @@ class RequeteBdd
             }
         }
         return null;
+    }
+
+    /*Ajoute un état des lieux pour la réservation
+    */
+    public function addEtat ($idResa, $etatGen){
+        $query="SELECT sp_insert_etat(:id, :etat)";
+        $stmt = $this->connexion->prepare($query);
+        $stmt->bindParam(":id",$idResa,\PDO::PARAM_STR);
+        $stmt->bindParam(":etat",$etatGen,\PDO::PARAM_STR);
+        $stmt->execute();
+        $row  = $stmt -> fetch();
+        return $row['sp_insert_etat'];
     }
 
 }
