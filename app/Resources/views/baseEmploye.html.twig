@@ -3,23 +3,8 @@
     <head>
         <meta charset="UTF-8">
 
-        {% block javascripts %}
-            <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/metisMenu.min.js') }}"></script>
-
-            <script src="{{ asset('bundles/jsEmploye/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
-            <script src="{{ asset('bundles/jsEmploye/vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
-
-            <script src="{{ asset('bundles/jsEmploye/sb-admin-2.js') }}"></script>
-
-        {% endblock %}
 
 
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         <title>
             {% block title %}
@@ -128,6 +113,19 @@
     {% block body %}
     {% endblock %}
     </body>
+    <script src="{{ asset('bundles/jsEmploye/jquery.js') }}"></script>
+    <script src="{{ asset('bundles/jsEmploye/bootstrap.js') }}"></script>
+    <script src="{{ asset('bundles/jsEmploye/moment.js') }}"></script>
+    <script src="{{ asset('bundles/jsEmploye/bootstrap-datetimepicker.js') }}"></script>
+    <script src="{{ asset('bundles/cssClient/vendor/metisMenu/metisMenu.js') }}"></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="{{ asset('bundles/jsEmploye/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('bundles/cssEmploye/vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/jsEmploye/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+    <script src="{{ asset('bundles/jsEmploye/sb-admin-2.js') }}"></script>
 
     {% block js %}
 
