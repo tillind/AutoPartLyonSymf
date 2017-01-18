@@ -236,7 +236,11 @@ class DefaultController extends Controller
             $login = $this->get('session')->get('user')['login'];
             $res=$this->get("app.requete_client")->addResa($debut,$fin,$nbKil,$depart,$arrivee,$login,$id);
             if ($res){
-                return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig');
+                return $this->render('ClientAutoPartBundle:Default:consulterResa.html.twig',
+                array(
+                    "mesReservations" => $this->get("app.requete_client")->getReservation($login)
+                )
+            );
             }
             else{
                 $this->get('session')->getFlashBag()->set('erreur', 'Choix de dates impossibles');
