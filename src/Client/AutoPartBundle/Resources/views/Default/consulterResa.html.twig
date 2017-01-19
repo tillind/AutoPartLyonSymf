@@ -45,7 +45,7 @@
 
             <td><a class="btn btn-primary" href="{{ path("client_autopart_default_annuler") }}/{{ maReservation.idreservation }}" role="button">Annuler</a></td>
 
-            {% elseif maReservation.etatreservation =='cloturee' and maReservation.idetatdeslieux==null %}
+            {% elseif maReservation.etatreservation =='achevee' and maReservation.idetatdeslieux==null %}
             <td><a class="btn btn-primary" href="{{ path("client_autopart_default_etatdeslieux") }}/{{ maReservation.idreservation }}" role="button">Etat des lieux</a></td>
 
             {% else %}
