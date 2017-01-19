@@ -27,7 +27,7 @@ class RequeteBdd
         $lesVoiture =array();
 
         if($this->connexion instanceof \PDO){
-            $stmt = $this->connexion->query("SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.codetypevoiture=typevoiture.code")->fetchAll();
+            $stmt = $this->connexion->query("SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.codetypevoiture=typevoiture.code and voiture.etatvoiture!='a supprimer'")->fetchAll();
             foreach($stmt as $lavoiture){
                 $lesVoiture[]= new Voiture($lavoiture[0],$lavoiture[2],$lavoiture[1],$lavoiture[3],$lavoiture[4]);
             }
@@ -43,7 +43,7 @@ class RequeteBdd
         $lesVoiture =array();
 
         if($this->connexion instanceof \PDO){
-            $stmt = $this->connexion->prepare("SELECT idvoiture,etatvoiture,nomvoiture,idstation,libelle FROM voiture,typeVoiture WHERE codetypevoiture= :var and voiture.codetypevoiture=typevoiture.code");
+            $stmt = $this->connexion->prepare("SELECT idvoiture,etatvoiture,nomvoiture,idstation,libelle FROM voiture,typeVoiture WHERE codetypevoiture= :var and voiture.codetypevoiture=typevoiture.code and voiture.etatvoiture!='a supprimer'");
             $stmt->bindParam(":var",$var,\PDO::PARAM_STR);
             $stmt->execute();
 
@@ -81,7 +81,7 @@ class RequeteBdd
 
             //si des dates ont été demandées
             if ($dateDebut!=null and $dateFin!=null){
-                $query="SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.codetypevoiture=typevoiture.code";
+                $query="SELECT idvoiture,etatvoiture,nomvoiture,idstation, libelle FROM voiture, typeVoiture where voiture.codetypevoiture=typevoiture.code and voiture.etatvoiture!='a supprimer'";
                 $stmt;
                 if ($categ !=null){
                     $query .=" and codetypevoiture= :categ";
@@ -307,7 +307,7 @@ class RequeteBdd
                 //vérification que la voiture est disponible aux dates demandées
                 $available=$this->checkVoiture($idvoiture,$debut,$fin);
                 if ($available){
-                    $query="INSERT INTO reservation (etatreservation, datedebutreservation,datefinreservation,nbkilometreparcouru,idetatdeslieux,idstationpartir,idstationarriver, idmembre, idvoiture) values('en cours',:deb,:fin,:nbKil,null,:depart,:arrivee,:id,:voiture)";
+                    $query="INSERT INTO reservation (etatreservation, datedebutreservation,datefinreservation,nbkilometreparcouru,idetatdeslieux,idstationpartir,idstationarriver, idmembre, idvoiture) values('en attente',:deb,:fin,:nbKil,null,:depart,:arrivee,:id,:voiture)";
                     $stmt = $this->connexion->prepare($query);
                     $stmt->bindParam(":deb",$debut,\PDO::PARAM_STR);
                     $stmt->bindParam(":fin",$fin,\PDO::PARAM_STR);
