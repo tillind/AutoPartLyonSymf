@@ -44,6 +44,7 @@
                             <li><h4>Code Type: {{  maVoiture.codetypevoiture}}</h4></li>
                             <a class="btn btn-primary" href="{{ path("employe_autopart_default_modifvoiturebyid") }}/{{ maVoiture.idVoiture }}" role="button">Modifier</a>
                             <a class="btn btn-primary" href="{{ path("employe_autopart_default_changerstationbyid") }}/{{ maVoiture.idVoiture }}" role="button">Changer de station</a>
+                            <a class="btn btn-primary" href="{{ path("employe_autopart_default_suppvoiturebyid") }}/{{ maVoiture.idVoiture }}" role="button">Supprimer le véhicule</a>
                             {% if maVoiture.etatVoiture!="En panne" %}
                             <a class="btn btn-primary" href="{{ path("employe_autopart_default_reparationbyid") }}/{{ maVoiture.idVoiture }}" role="button">Fiche intervention</a>
                             {% endif %}

@@ -3,16 +3,14 @@
 namespace Employe\AutoPartBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 class DefaultController extends Controller
 {
     /**
@@ -134,7 +132,7 @@ class DefaultController extends Controller
                     'Moyen' => 'Moyen',
                     'Bas' => 'Bas',
                     'En panne' => 'En panne',
-                    'A supprimer' => 'Supprimer',
+                    'A supprimer' => 'A supprimer',
                 ),
             ))
             ->add('codevoiture', ChoiceType::class,
@@ -422,9 +420,9 @@ class DefaultController extends Controller
             $data = $form->getData();
 
 
+           $this->get("app.requete_employe")->reparationVoiture($data,$id);
+
             $lesVoitures = $this->get("app.requete_employe")->getLesVoituresById($id);
-
-
             return $this->render('EmployeAutoPartBundle:Default:ficheVehicule.html.twig',
                 array(
                     "mesVoitures"=>$lesVoitures,
@@ -462,6 +460,60 @@ class DefaultController extends Controller
             )
         );
     }
+
+
+
+
+    /**
+     * @Route("/suppvoiture/{id}")
+     */
+    public function suppVoitureByIdAction($id=null,Request $request)
+    {
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+
+        $formBuilder = $this->get('form.factory')->createBuilder();
+
+            $formBuilder
+                ->add('typesuppression', ChoiceType::class, array(
+                    'choices'  => array(
+                        'Urgent' => 'Urgent',
+                        'Non Urgent' => 'Non Urgent',
+                    ),
+                ))
+                ->add('numcartegrise', TextType::class)
+                ->add('submit', SubmitType::class);
+        $form = $formBuilder->getForm();
+        $lesStations = $this->get("app.requete_employe")->getLesStations();
+        $lesCategories = $this->get("app.requete_employe")->getLesCategVoiture();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+            $type= $data['typesuppression'];
+            $this->get("app.requete_employe")->suppvoiturebyid($id,$type);
+
+            //employe_autopart_default_suppvoiturebyid
+            return $this->render('EmployeAutoPartBundle:Default:suppVehicule.html.twig',
+                array(
+                    'form' => $form->createView()
+                ));
+
+        }
+        return $this->render('EmployeAutoPartBundle:Default:suppVehicule.html.twig',
+            array(
+                'form' => $form->createView()
+            ));
+    }
+
+
+
+
     /**
      * @Route("/add_collaborator")
      */
@@ -548,6 +600,23 @@ class DefaultController extends Controller
     public function manageAccountAction(Request $request){
 
         return null;
+    }
+    /**
+     * @Route("/calculstats/")
+     */
+    public function calculStatsAction(Request $request){
+        if ($this->get('session')->isStarted()) {
+            $type = $this->get('session')->get('type');
+            if ($type == 'utilisateur') {
+                return $this->redirectToRoute('client_autopart_default_index');
+            }
+        }else{
+            return $this->redirectToRoute("base_autopart_default_index");
+        }
+        $lesStats = $this->get("app.requete_employe")->getLesStats();
+        return $this->render("EmployeAutoPartBundle:Default:statistiques.html.twig",array(
+                "mesStats"=>$lesStats,
+        ));
     }
 }
 

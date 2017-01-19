@@ -260,6 +260,59 @@ class RequeteBdd
         $stmt->bindValue(":id",$id);
         $stmt->execute();
     }
+    public function reparationVoiture($arrayReparation,$id){
+        $stmt2=$this->connexion->prepare(" SELECT numcartegrise FROM voiture WHERE idvoiture=:id");
+        $stmt2->bindParam(":id",$id,\PDO::PARAM_STR);
+        $stmt2->execute();
+        $numcartegrise= $stmt2 -> fetch();
+        if($numcartegrise['numcartegrise']===$arrayReparation['numcartegrise'])
+        {
+            $stmt2 = $this->connexion->prepare("UPDATE public.voiture SET etatvoiture='En panne' WHERE idvoiture=:idvoiture;");
+            $stmt2->bindParam(":idvoiture",$id,\PDO::PARAM_STR);
+            $stmt2->execute();
+            $stmt = $this->connexion->prepare("INSERT INTO public.interventionvoiture(dateintervention, typeintervention, descriptif, datefinintervention, idvoiture) VALUES (
+            :datedeb,
+            :typeinter,
+            :description,
+            :datefin,
+            :idvoiture
+             );");
+            $stmt->bindParam(":datedeb",$arrayReparation['datedebutintervention'],\PDO::PARAM_STR);
+            $stmt->bindParam(":datefin",$arrayReparation['datefinintervention'],\PDO::PARAM_STR);
+            $stmt->bindParam(":typeinter",$arrayReparation['typeintervention'],\PDO::PARAM_STR);
+            $stmt->bindParam(":description",$arrayReparation['descriptif'],\PDO::PARAM_STR);
+            $stmt->bindParam(":idvoiture",$id,\PDO::PARAM_STR);
+            $stmt->execute();
+
+        }
+    }
+    public function suppvoiturebyid($id,$type){
+
+        if($type=='Urgent')
+        {
+            $stmt2 = $this->connexion->prepare("SELECT COUNT(*) FROM reservation WHERE idvoiture=:id AND datedebutreservation>DATE( NOW() );");
+            $stmt2->bindValue(":id",$id);
+            $stmt2->execute();
+            $row = $stmt2->fetchAll();
+            if($row[0]['count']>0)
+            {
+                $stmt = $this->connexion->prepare("UPDATE public.reservation SET etatreservation='Annule' WHERE idvoiture=:idvoiture AND datedebutreservation>DATE( NOW() ) AND etatreservation='En attente';");
+                $stmt->bindParam(":idvoiture",$id,\PDO::PARAM_STR);
+                $stmt->execute();
+            }
+        }
+        $stmt3 = $this->connexion->prepare("UPDATE public.voiture SET etatvoiture='A supprimer' WHERE idvoiture=:idvoiture;");
+        $stmt3->bindParam(":idvoiture",$id,\PDO::PARAM_STR);
+        $stmt3->execute();
+    }
+
+    public function getLesStats(){
+        $stmt = $this->connexion->prepare("SELECT * FROM public.v_stat");
+        $stmt->execute();
+        $row = $stmt->fetchAll();
+        return $row;
+    }
+
 
 
 }
